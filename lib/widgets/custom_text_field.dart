@@ -7,14 +7,17 @@ class CustomTextField extends StatefulWidget {
   final EdgeInsetsGeometry padding;
   final Widget? trailing;
   final String? suffixText;
-  CustomTextField(
-      {Key? key,
-      required this.controller,
-      required this.hintText,
-      required this.padding,
-      required this.trailing,
-      this.suffixText})
-      : super(key: key);
+  final bool obscureText;
+
+  CustomTextField({
+    Key? key,
+    required this.controller,
+    required this.hintText,
+    required this.padding,
+    required this.trailing,
+    this.suffixText,
+    this.obscureText = false,
+  }) : super(key: key);
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -29,6 +32,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         width: 343.w,
         height: 36.h,
         child: TextField(
+          obscureText: widget.obscureText,
           controller: widget.controller,
           decoration: InputDecoration(
             hintText: widget.hintText,

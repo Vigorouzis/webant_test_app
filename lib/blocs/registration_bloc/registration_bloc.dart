@@ -6,18 +6,27 @@ import 'package:webant_test_app/resources/auth_api/auth_repository.dart';
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   RegistrationBloc() : super(InitRegistrationState());
 
-  AuthRepository _authRepository = AuthRepository();
+  var _authRepository = AuthRepository();
 
   @override
   Stream<RegistrationState> mapEventToState(RegistrationEvent event) async* {
     if (event is Registration) {
-      var response = await _authRepository.registrationNewUser(
-        fullName: event.fullName,
-        birthday: event.birthday,
-        email: event.email,
-        password: event.password,
-      );
-      
+      yield RegistrationLoading();
+      try {
+        var response = await _authRepository.registrationNewUser(
+          fullName: event.fullName,
+          birthday: event.birthday,
+          email: event.email,
+          password: event.password,
+        );
+        if (response == 'OK') {
+          yield RegistrationSuccess();
+        } else {
+          yield RegistrationError();
+        }
+      } catch (_) {
+        yield RegistrationError();
+      }
     }
   }
 }

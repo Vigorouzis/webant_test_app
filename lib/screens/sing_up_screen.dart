@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webant_test_app/blocs/registration_bloc/registration_bloc.dart';
 import 'package:webant_test_app/blocs/registration_bloc/registration_event.dart';
 import 'package:webant_test_app/blocs/registration_bloc/registration_state.dart';
+import 'package:webant_test_app/screens/main_screen.dart';
 import 'package:webant_test_app/screens/sing_in_screen.dart';
 import 'package:webant_test_app/utils/utils.dart';
 import 'package:webant_test_app/widgets/custom_app_bar.dart';
@@ -22,6 +23,10 @@ class _SingUpScreenState extends State<SingUpScreen> {
   TextEditingController? _emailController;
   TextEditingController? _passwordController;
   TextEditingController? _confirmPasswordController;
+  TextEditingController? _usernameController;
+  TextEditingController? _phoneController;
+  bool _passwordObscureText = true;
+  bool _confirmPasswordObscureText = true;
 
   @override
   void initState() {
@@ -30,6 +35,8 @@ class _SingUpScreenState extends State<SingUpScreen> {
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     _confirmPasswordController = TextEditingController();
+    _usernameController = TextEditingController();
+    _phoneController = TextEditingController();
     super.initState();
   }
 
@@ -40,6 +47,8 @@ class _SingUpScreenState extends State<SingUpScreen> {
     _emailController?.dispose();
     _passwordController?.dispose();
     _confirmPasswordController?.dispose();
+    _usernameController?.dispose();
+    _phoneController?.dispose();
     super.dispose();
   }
 
@@ -52,9 +61,15 @@ class _SingUpScreenState extends State<SingUpScreen> {
           child: Builder(
             builder: (context) =>
                 BlocConsumer<RegistrationBloc, RegistrationState>(
-              listener: (context, state) {},
+              listener: (context, state) {
+                if (state is RegistrationSuccess) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => MainScreen()),
+                  );
+                }
+              },
               builder: (_, state) => SingleChildScrollView(
-                              child: Column(
+                child: Column(
                   children: [
                     CustomAppBar(),
                     Padding(
@@ -86,6 +101,22 @@ class _SingUpScreenState extends State<SingUpScreen> {
                       suffixText: '*',
                     ),
                     CustomTextField(
+                      controller: _usernameController,
+                      hintText: 'Username',
+                      padding:
+                          EdgeInsets.only(left: 16.w, right: 16.w, top: 29.h),
+                      trailing: AppIcons.user(),
+                      suffixText: '*',
+                    ),
+                    CustomTextField(
+                      controller: _phoneController,
+                      hintText: 'Phone',
+                      padding:
+                          EdgeInsets.only(left: 16.w, right: 16.w, top: 29.h),
+                      trailing: Icon(Icons.phone),
+                      suffixText: '*',
+                    ),
+                    CustomTextField(
                       controller: _birthdayController,
                       hintText: 'Birthday',
                       padding:
@@ -101,11 +132,19 @@ class _SingUpScreenState extends State<SingUpScreen> {
                       suffixText: '*',
                     ),
                     CustomTextField(
+                      obscureText: _passwordObscureText,
                       controller: _passwordController,
                       hintText: 'Password',
                       padding:
                           EdgeInsets.only(left: 16.w, right: 16.w, top: 29.h),
-                      trailing: AppIcons.eye(),
+                      trailing: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _passwordObscureText = !_passwordObscureText;
+                          });
+                        },
+                        child: AppIcons.eye(),
+                      ),
                       suffixText: '*',
                     ),
                     CustomTextField(
@@ -113,8 +152,17 @@ class _SingUpScreenState extends State<SingUpScreen> {
                       hintText: 'Confirm password',
                       padding:
                           EdgeInsets.only(left: 16.w, right: 16.w, top: 29.h),
-                      trailing: AppIcons.eye(),
+                      trailing: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _confirmPasswordObscureText =
+                                !_confirmPasswordObscureText;
+                          });
+                        },
+                        child: AppIcons.eye(),
+                      ),
                       suffixText: '*',
+                      obscureText: _confirmPasswordObscureText,
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 50.h),
@@ -127,11 +175,12 @@ class _SingUpScreenState extends State<SingUpScreen> {
                                 _confirmPasswordController?.text) {
                               context.read<RegistrationBloc>().add(
                                     Registration(
-                                      fullName: _nameController?.text,
-                                      birthday: _birthdayController?.text,
-                                      email: _emailController?.text,
-                                      password: _passwordController?.text,
-                                    ),
+                                        fullName: _nameController?.text,
+                                        birthday: _birthdayController?.text,
+                                        email: _emailController?.text,
+                                        password: _passwordController?.text,
+                                        phone: _phoneController?.text,
+                                        username: _usernameController?.text),
                                   );
                             }
                           },
@@ -155,8 +204,8 @@ class _SingUpScreenState extends State<SingUpScreen> {
                         ),
                         child: Text(
                           'Sing In',
-                          style:
-                              AppTypography.font17.copyWith(color: Colors.black),
+                          style: AppTypography.font17
+                              .copyWith(color: Colors.black),
                         ),
                       ),
                     ),
