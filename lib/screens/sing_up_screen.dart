@@ -99,11 +99,10 @@ class _SingUpScreenState extends State<SingUpScreen> {
                     //TODO: найти способ добавит астерикс * в hint
                     CustomTextField(
                       controller: _nameController,
-                      hintText: 'User Name',
+                      hintText: 'Full Name',
                       padding:
                           EdgeInsets.only(left: 16.w, right: 16.w, top: 50.h),
                       trailing: AppIcons.user(),
-                      suffixText: '*',
                     ),
                     CustomTextField(
                       controller: _usernameController,
@@ -111,7 +110,6 @@ class _SingUpScreenState extends State<SingUpScreen> {
                       padding:
                           EdgeInsets.only(left: 16.w, right: 16.w, top: 29.h),
                       trailing: AppIcons.user(),
-                      suffixText: '*',
                     ),
                     CustomTextField(
                       controller: _phoneController,
@@ -119,7 +117,6 @@ class _SingUpScreenState extends State<SingUpScreen> {
                       padding:
                           EdgeInsets.only(left: 16.w, right: 16.w, top: 29.h),
                       trailing: Icon(Icons.phone),
-                      suffixText: '*',
                     ),
                     CustomTextField(
                       controller: _birthdayController,
@@ -134,7 +131,6 @@ class _SingUpScreenState extends State<SingUpScreen> {
                       padding:
                           EdgeInsets.only(left: 16.w, right: 16.w, top: 29.h),
                       trailing: AppIcons.email(),
-                      suffixText: '*',
                     ),
                     CustomTextField(
                       obscureText: _passwordObscureText,
@@ -150,7 +146,6 @@ class _SingUpScreenState extends State<SingUpScreen> {
                         },
                         child: AppIcons.eye(),
                       ),
-                      suffixText: '*',
                     ),
                     CustomTextField(
                       controller: _confirmPasswordController,
@@ -166,7 +161,6 @@ class _SingUpScreenState extends State<SingUpScreen> {
                         },
                         child: AppIcons.eye(),
                       ),
-                      suffixText: '*',
                       obscureText: _confirmPasswordObscureText,
                     ),
                     Padding(

@@ -20,7 +20,7 @@ class AuthRepository {
         phone: phone,
       );
 
-  Future<String> authorization({
+  Future<String?> authorization({
     String? email,
     String? password,
   }) =>
