@@ -8,6 +8,7 @@ import 'package:webant_test_app/resources/image_api/image_repository.dart';
 import 'package:webant_test_app/resources/user_api/user_repository.dart';
 import 'package:webant_test_app/screens/main_screen.dart';
 import 'package:webant_test_app/screens/profile_screen.dart';
+import 'package:webant_test_app/screens/splash_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (_) => ProfileBloc(userRepository: UserRepository()),
           )
-        ], child: ProfileScreen()),
+        ], child: SplashScreen()),
       ),
     );
   }

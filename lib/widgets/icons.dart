@@ -82,16 +82,20 @@ abstract class AppIcons {
         height: 42.h,
         fit: BoxFit.none,
       );
+
   static Widget settings() => SvgPicture.asset(
-    'assets/icons/settings.svg',
-    width: 22.w,
-    height: 22.h,
-    fit: BoxFit.none,
-  );
+        'assets/icons/settings.svg',
+        width: 22.w,
+        height: 22.h,
+        fit: BoxFit.none,
+      );
+
   static Widget backArrow() => SvgPicture.asset(
-    'assets/icons/back_arrow.svg',
-    width: 7.w,
-    height: 13.h,
-    fit: BoxFit.none,
-  );
+        'assets/icons/back_arrow.svg',
+        width: 7.w,
+        height: 13.h,
+        fit: BoxFit.none,
+      );
+
+
 }
