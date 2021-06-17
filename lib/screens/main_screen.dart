@@ -1,10 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webant_test_app/blocs/load_image_bloc/load_image_bloc.dart';
 import 'package:webant_test_app/blocs/load_image_bloc/load_image_event.dart';
 import 'package:webant_test_app/blocs/load_image_bloc/load_image_state.dart';
+import 'package:webant_test_app/blocs/load_popular_images_bloc/load_popular_images_bloc.dart';
+import 'package:webant_test_app/blocs/load_popular_images_bloc/load_popular_images_event.dart';
+import 'package:webant_test_app/blocs/load_popular_images_bloc/load_popular_images_state.dart';
+import 'package:webant_test_app/resources/image_api/image_repository.dart';
 import 'package:webant_test_app/utils/utils.dart';
+import 'package:webant_test_app/widgets/icons.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -48,7 +54,6 @@ class _MainScreenState extends State<MainScreen>
   Widget build(BuildContext context) {
     final List<Widget> _children = [
       LoadImageItemScreen(
-        context: context,
         tabController: _tabController,
         searchController: _searchController,
       ),
@@ -63,21 +68,28 @@ class _MainScreenState extends State<MainScreen>
     ];
 
     return Scaffold(
-      body: BlocProvider(
-        create: (_) => LoadImageBloc(),
-        child: Builder(
-          builder: (context) => SafeArea(
-            child: _children[_currentIndex],
-          ),
-        ),
+      body: SafeArea(
+        child: _children[_currentIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: onTabTapped,
         items: [
-          BottomNavigationBarItem(icon: new Icon(Icons.home), label: ''),
-          BottomNavigationBarItem(icon: new Icon(Icons.home), label: ''),
-          BottomNavigationBarItem(icon: new Icon(Icons.home), label: ''),
+          BottomNavigationBarItem(
+            icon: AppIcons.homePage(),
+            label: '',
+            activeIcon: AppIcons.activeHomePage(),
+          ),
+          BottomNavigationBarItem(
+            icon: AppIcons.uploadPhoto(),
+            label: '',
+            activeIcon: AppIcons.activeUploadPhoto(),
+          ),
+          BottomNavigationBarItem(
+            icon: AppIcons.profile(),
+            label: '',
+            activeIcon: AppIcons.activeProfile(),
+          ),
         ],
       ),
     );
@@ -87,11 +99,9 @@ class _MainScreenState extends State<MainScreen>
 class LoadImageItemScreen extends StatefulWidget {
   final TabController? _tabController;
   final TextEditingController? _searchController;
-  BuildContext? context;
 
   LoadImageItemScreen(
       {Key? key,
-      this.context,
       TabController? tabController,
       TextEditingController? searchController})
       : _tabController = tabController,
@@ -185,12 +195,8 @@ class _LoadImageItemScreenState extends State<LoadImageItemScreen> {
         Expanded(
           child: Container(
             child: TabBarView(controller: widget._tabController, children: [
-              NewImagesTab(
-                context: widget.context,
-              ),
-              NewImagesTab(
-                context: widget.context,
-              ),
+              NewImagesTab(),
+              PopularImagesTab(),
             ]),
           ),
         )
@@ -200,18 +206,43 @@ class _LoadImageItemScreenState extends State<LoadImageItemScreen> {
 }
 
 class NewImagesTab extends StatefulWidget {
-  BuildContext? context;
-
-  NewImagesTab({Key? key, this.context}) : super(key: key);
+  NewImagesTab({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _NewImagesTabState createState() => _NewImagesTabState();
 }
 
 class _NewImagesTabState extends State<NewImagesTab> {
+  ScrollController? _controller;
+  int _page = 1;
+
+  int _countOfPages = 0;
+
+  ImageRepository? _repository;
+
+  void getCountOfPages() async {
+    _countOfPages = (await _repository?.getNewCountOfPages())!;
+  }
+
   @override
   void initState() {
-    context.read<LoadImageBloc>().add(LoadNewImage(limit: 10, page: 1));
+    context.read<LoadImageBloc>().add(LoadNewImage(limit: 10, page: _page));
+    _controller = ScrollController();
+    _repository = ImageRepository();
+    getCountOfPages();
+    _controller?.addListener(() {
+      if (_controller?.position.pixels ==
+          _controller?.position.maxScrollExtent) {
+        if (_page != _countOfPages) {
+          _page++;
+          context
+              .read<LoadImageBloc>()
+              .add(LoadNewImage(limit: 10, page: _page));
+        }
+      }
+    });
     super.initState();
   }
 
@@ -219,25 +250,136 @@ class _NewImagesTabState extends State<NewImagesTab> {
   Widget build(BuildContext context) {
     return BlocBuilder<LoadImageBloc, LoadImageState>(
       builder: (context, state) {
+        if (state is LoadImageFailed) {
+          return Center(
+            child: Text('Sorry!'),
+          );
+        }
+
         if (state is ImageLoadingState) {
           return Center(child: CircularProgressIndicator());
         }
         if (state is LoadImageSuccess) {
-          return GridView.builder(
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 200,
-                childAspectRatio: 3 / 2,
-                crossAxisSpacing: 20,
-                mainAxisSpacing: 20),
-            itemCount: state.imageFileNameList?.length,
-            itemBuilder: (context, index) => Container(
-              width: 166.w,
-              height: 166.h,
-              child: CachedNetworkImage(
-                imageUrl:
-                    'http://gallery.dev.webant.ru/media/${state.imageFileNameList?[index]}',
-              ),
-            ),
+          return RefreshIndicator(
+            onRefresh: () async {
+              _page = 1;
+              context
+                  .read<LoadImageBloc>()
+                  .add(LoadNewImage(limit: 10, page: _page, isRefresh: true));
+            },
+            child: GridView.builder(
+                controller: _controller,
+                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 200,
+                    childAspectRatio: 3 / 2,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20),
+                itemCount: state.newImageFileNameList!.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == state.newImageFileNameList?.length) {
+                    return CupertinoActivityIndicator();
+                  } else {
+                    return Container(
+                      width: 166.w,
+                      height: 166.h,
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            'http://gallery.dev.webant.ru/media/${state.newImageFileNameList?[index]}',
+                      ),
+                    );
+                  }
+                }),
+          );
+        }
+        return Container();
+      },
+    );
+  }
+}
+
+class PopularImagesTab extends StatefulWidget {
+  PopularImagesTab({Key? key}) : super(key: key);
+
+  @override
+  _PopularImagesTabState createState() => _PopularImagesTabState();
+}
+
+class _PopularImagesTabState extends State<PopularImagesTab> {
+  ScrollController? _controller;
+  int _page = 1;
+  int _countOfPages = 0;
+
+  ImageRepository? _repository;
+
+  void getCountOfPages() async {
+    _countOfPages = (await _repository?.getPopularCountOfPages())!;
+  }
+
+  @override
+  void initState() {
+    context
+        .read<LoadPopularImageBloc>()
+        .add(LoadPopularImage(limit: 10, page: _page, isRefresh: false));
+    _controller = ScrollController();
+    _repository = ImageRepository();
+    getCountOfPages();
+    _controller?.addListener(() {
+      if (_controller?.position.pixels ==
+          _controller?.position.maxScrollExtent) {
+        if (_page != _countOfPages) {
+          _page++;
+          context
+              .read<LoadPopularImageBloc>()
+              .add(LoadPopularImage(limit: 10, page: _page));
+        }
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoadPopularImageBloc, LoadPopularImageState>(
+      builder: (context, state) {
+        if (state is LoadPopularImageFailed) {
+          return Center(
+            child: Text('Sorry!'),
+          );
+        }
+
+        if (state is PopularImageLoadingState) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (state is LoadPopularImageSuccess) {
+          return RefreshIndicator(
+            onRefresh: () async {
+              _page = 1;
+              context
+                  .read<LoadPopularImageBloc>()
+                  .add(LoadPopularImage(limit: 10, page: 1, isRefresh: true));
+            },
+            child: GridView.builder(
+                controller: _controller,
+                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 200,
+                    childAspectRatio: 3 / 2,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20),
+                itemCount: state.popularImageFileNameList!.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == state.popularImageFileNameList?.length) {
+                    return CupertinoActivityIndicator();
+                  } else {
+                    return Container(
+                      width: 166.w,
+                      height: 166.h,
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            'http://gallery.dev.webant.ru/media/${state.popularImageFileNameList?[index]}',
+                      ),
+                    );
+                  }
+                }),
           );
         }
         return Container();

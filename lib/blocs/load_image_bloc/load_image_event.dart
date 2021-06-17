@@ -5,13 +5,7 @@ abstract class LoadImageEvent {
 class LoadNewImage extends LoadImageEvent {
   final int? page;
   final int? limit;
+  final bool? isRefresh;
 
-  LoadNewImage({this.page, this.limit});
-}
-
-class LoadPopularImage extends LoadImageEvent {
-  final int? page;
-  final int? limit;
-
-  LoadPopularImage({this.page, this.limit});
+  LoadNewImage({this.page, this.limit, this.isRefresh});
 }

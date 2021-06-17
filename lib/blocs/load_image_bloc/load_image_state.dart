@@ -7,9 +7,9 @@ class InitLoadImageState extends LoadImageState {}
 class ImageLoadingState extends LoadImageState {}
 
 class LoadImageSuccess extends LoadImageState {
-  final List<String?>? imageFileNameList;
+  final List<String?>? newImageFileNameList;
 
-  LoadImageSuccess({this.imageFileNameList});
+  const LoadImageSuccess({this.newImageFileNameList});
 }
 
 class LoadImageFailed extends LoadImageState {}

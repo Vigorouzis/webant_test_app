@@ -16,16 +16,63 @@ abstract class AppIcons {
         height: 16.w,
         fit: BoxFit.none,
       );
+
   static Widget user() => SvgPicture.asset(
         'assets/icons/name_text_field.svg',
         width: 18.w,
         height: 18.w,
         fit: BoxFit.none,
       );
+
   static Widget calendar() => SvgPicture.asset(
         'assets/icons/birthday_text_field.svg',
         width: 22.w,
         height: 22.w,
         fit: BoxFit.none,
+      );
+
+  static Widget homePage() => SvgPicture.asset(
+        'assets/icons/house.svg',
+        width: 24.w,
+        height: 23.w,
+        fit: BoxFit.none,
+      );
+
+  static Widget activeHomePage() => SvgPicture.asset(
+        'assets/icons/house.svg',
+        width: 24.w,
+        height: 23.w,
+        fit: BoxFit.none,
+        color: Color(0xFFCF497E),
+      );
+
+  static Widget uploadPhoto() => SvgPicture.asset(
+        'assets/icons/camera.svg',
+        width: 28.w,
+        height: 22.w,
+        fit: BoxFit.none,
+      );
+
+  static Widget activeUploadPhoto() => SvgPicture.asset(
+        'assets/icons/camera.svg',
+        width: 28.w,
+        height: 22.w,
+        fit: BoxFit.none,
+        color: Color(0xFFCF497E),
+      );
+
+  static Widget profile() => SvgPicture.asset(
+        'assets/icons/profile.svg',
+        width: 24.w,
+        height: 23.w,
+        fit: BoxFit.none,
+      );
+
+  static Widget activeProfile() => SvgPicture.asset(
+        'assets/icons/profile.svg',
+        width: 24.w,
+        height: 23.w,
+        fit: BoxFit.none,
+        color: Color(0xFFCF497E),
       );
 }

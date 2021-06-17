@@ -19,6 +19,8 @@ dependencies:
   flutter_svg: ^0.22.0
   shared_preferences: ^2.0.6
   cached_network_image: ^3.0.0
+  infinite_scroll_pagination: ^3.0.1+1
+  connectivity: ^3.0.6
 
 
 
