@@ -70,7 +70,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Row(
                       children: [
                         Text(
-                          'Loaded: ',
+                         context.localize!.loaded,
                           style: AppTypography.font12,
                         ),
                         Text(
@@ -104,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               }),
                         )
                       : Center(
-                          child: Text('Нет фоток'),
+                          child: Text(context.localize!.noPhoto),
                         ),
                 ],
               );

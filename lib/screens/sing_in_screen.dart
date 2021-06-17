@@ -55,7 +55,7 @@ class _SingInScreenState extends State<SingInScreen> {
                   children: [
                     CustomAppBar(
                       leading: Text(
-                        'Cancel',
+                        context.localize!.cancel,
                         style: AppTypography.font15,
                       ),
                     ),
@@ -65,7 +65,7 @@ class _SingInScreenState extends State<SingInScreen> {
                         child: Column(
                           children: [
                             Text(
-                              'Sing in',
+                              context.localize!.signIn,
                               style: AppTypography.font30
                                   .copyWith(fontWeight: FontWeight.w700),
                             ),
@@ -80,14 +80,14 @@ class _SingInScreenState extends State<SingInScreen> {
                     ),
                     CustomTextField(
                       controller: _usernameController,
-                      hintText: 'Username',
+                      hintText: context.localize!.username,
                       padding:
                           EdgeInsets.only(left: 16.w, right: 16.w, top: 50.h),
                       trailing: AppIcons.email(),
                     ),
                     CustomTextField(
                       controller: _passwordController,
-                      hintText: 'Password',
+                      hintText: context.localize!.password,
                       padding:
                           EdgeInsets.only(left: 16.w, right: 16.w, top: 29.h),
                       trailing: AppIcons.eye(),
@@ -97,7 +97,7 @@ class _SingInScreenState extends State<SingInScreen> {
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: Text(
-                          'Forgot login or password?',
+                          context.localize!.forgotLoginOrPassword,
                           style: AppTypography.font13
                               .copyWith(color: Color(0xFFC4C4C4)),
                         ),
@@ -116,7 +116,7 @@ class _SingInScreenState extends State<SingInScreen> {
                                 ),
                               ),
                           child: Text(
-                            'Sing In',
+                            context.localize!.signIn,
                             style: AppTypography.font17
                                 .copyWith(fontWeight: FontWeight.w700),
                           ),
@@ -134,7 +134,7 @@ class _SingInScreenState extends State<SingInScreen> {
                           ),
                         ),
                         child: Text(
-                          'Sing Up',
+                          context.localize!.signUp,
                           style: AppTypography.font17
                               .copyWith(color: Colors.black),
                         ),

@@ -126,7 +126,7 @@ class _LoadImageItemScreenState extends State<LoadImageItemScreen> {
               decoration: InputDecoration(
                 fillColor: Color(0xFF8E8E93).withOpacity(0.12),
                 filled: true,
-                hintText: 'Search',
+                hintText: context.localize!.search,
                 hintStyle: AppTypography.font17.copyWith(
                   color: Colors.black.withOpacity(0.4),
                 ),
@@ -159,7 +159,7 @@ class _LoadImageItemScreenState extends State<LoadImageItemScreen> {
                   ),
                   child: Center(
                     child: Text(
-                      'New',
+                      context.localize!.newImages,
                       style: AppTypography.font17.copyWith(
                         color: Color(0xFFC4C4C4),
                       ),
@@ -180,7 +180,7 @@ class _LoadImageItemScreenState extends State<LoadImageItemScreen> {
                   ),
                   child: Center(
                     child: Text(
-                      'Popular',
+                      context.localize!.popular,
                       style: AppTypography.font17.copyWith(
                         color: Color(0xFFC4C4C4),
                       ),
@@ -257,7 +257,7 @@ class _NewImagesTabState extends State<NewImagesTab> {
               Padding(
                 padding: EdgeInsets.only(top: 8.h),
                 child: Text(
-                  'Sorry!',
+                  context.localize!.sorry,
                   style:
                       AppTypography.font17.copyWith(color: Color(0xFFC4C4C4)),
                 ),
@@ -265,14 +265,14 @@ class _NewImagesTabState extends State<NewImagesTab> {
               Padding(
                 padding: EdgeInsets.only(top: 8.h),
                 child: Text(
-                  'There is no pictures.',
+                  context.localize!.thereIsNoPictures,
                   style:
                       AppTypography.font12.copyWith(color: Color(0xFFC4C4C4)),
                   textAlign: TextAlign.center,
                 ),
               ),
               Text(
-                'Please come back later.',
+                context.localize!.pleaseComeBackLater,
                 style: AppTypography.font12.copyWith(color: Color(0xFFC4C4C4)),
                 textAlign: TextAlign.center,
               ),
@@ -382,7 +382,7 @@ class _PopularImagesTabState extends State<PopularImagesTab> {
               Padding(
                 padding: EdgeInsets.only(top: 8.h),
                 child: Text(
-                  'Sorry!',
+                  context.localize!.sorry,
                   style:
                       AppTypography.font17.copyWith(color: Color(0xFFC4C4C4)),
                 ),
@@ -390,14 +390,14 @@ class _PopularImagesTabState extends State<PopularImagesTab> {
               Padding(
                 padding: EdgeInsets.only(top: 8.h),
                 child: Text(
-                  'There is no pictures.',
+                  context.localize!.thereIsNoPictures,
                   style:
                       AppTypography.font12.copyWith(color: Color(0xFFC4C4C4)),
                   textAlign: TextAlign.center,
                 ),
               ),
               Text(
-                'Please come back later.',
+                context.localize!.pleaseComeBackLater,
                 style: AppTypography.font12.copyWith(color: Color(0xFFC4C4C4)),
                 textAlign: TextAlign.center,
               ),
