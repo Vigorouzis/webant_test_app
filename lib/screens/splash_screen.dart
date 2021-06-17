@@ -5,6 +5,10 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: Center(
+          child: Image.network(
+              'http://gallery.dev.webant.ru/media/5f98883c96019993214838.jpg')),
+    );
   }
 }
