@@ -53,7 +53,12 @@ class _SingInScreenState extends State<SingInScreen> {
               builder: (context, state) => SingleChildScrollView(
                 child: Column(
                   children: [
-                    CustomAppBar(),
+                    CustomAppBar(
+                      leading: Text(
+                        'Cancel',
+                        style: AppTypography.font15,
+                      ),
+                    ),
                     Padding(
                       padding: EdgeInsets.only(top: 100.h),
                       child: SizedBox(

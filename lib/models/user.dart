@@ -1,28 +1,31 @@
 class User {
-  final String? name;
-  final String? birthday;
+  final String name;
+  final String birthday;
   final String? email;
   final String? phone;
   final String? password;
-  final String? username;
+  final String username;
+  List<String?>? uploadImages;
 
   User({
-    this.name,
-    this.birthday,
+    required this.name,
+    required this.birthday,
+    required this.uploadImages,
     this.email,
     this.phone,
     this.password,
-    this.username,
+    required this.username,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      name: json['name'],
+      name: json['fullName'],
       birthday: json['birthday'],
       email: json['email'],
       password: json['password'],
       phone: json['phone'],
       username: json['username'],
+      uploadImages: json['uploadImages'],
     );
   }
 }
