@@ -37,8 +37,9 @@ class DetailImageScreen extends StatelessWidget {
               padding: EdgeInsets.only(left: 16.w, top: 10.h),
               child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(
-                      image!.user == null ? 'Not indicated' : image!.user!)),
+                  child: Text(image!.user == null
+                      ? context.localize!.notIndicated
+                      : image!.user!)),
             ),
             Padding(
               padding: EdgeInsets.only(left: 16.w, top: 20.h, right: 16.w),

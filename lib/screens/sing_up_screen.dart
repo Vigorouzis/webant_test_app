@@ -73,7 +73,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                   children: [
                     CustomAppBar(
                       leading: Text(
-                        'Cancel',
+                        context.localize!.cancel,
                         style: AppTypography.font15,
                       ),
                     ),
@@ -83,7 +83,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                         child: Column(
                           children: [
                             Text(
-                              'Sing in',
+                              context.localize!.signIn,
                               style: AppTypography.font30
                                   .copyWith(fontWeight: FontWeight.w700),
                             ),
@@ -99,35 +99,35 @@ class _SingUpScreenState extends State<SingUpScreen> {
                     //TODO: найти способ добавит астерикс * в hint
                     CustomTextField(
                       controller: _nameController,
-                      hintText: 'Full Name',
+                      hintText: context.localize!.fullName,
                       padding:
                           EdgeInsets.only(left: 16.w, right: 16.w, top: 50.h),
                       trailing: AppIcons.user(),
                     ),
                     CustomTextField(
                       controller: _usernameController,
-                      hintText: 'Username',
+                      hintText: context.localize!.username,
                       padding:
                           EdgeInsets.only(left: 16.w, right: 16.w, top: 29.h),
                       trailing: AppIcons.user(),
                     ),
                     CustomTextField(
                       controller: _phoneController,
-                      hintText: 'Phone',
+                      hintText: context.localize!.phone,
                       padding:
                           EdgeInsets.only(left: 16.w, right: 16.w, top: 29.h),
                       trailing: Icon(Icons.phone),
                     ),
                     CustomTextField(
                       controller: _birthdayController,
-                      hintText: 'Birthday',
+                      hintText: context.localize!.birthday,
                       padding:
                           EdgeInsets.only(left: 16.w, right: 16.w, top: 29.h),
                       trailing: AppIcons.calendar(),
                     ),
                     CustomTextField(
                       controller: _emailController,
-                      hintText: 'Email',
+                      hintText: context.localize!.email,
                       padding:
                           EdgeInsets.only(left: 16.w, right: 16.w, top: 29.h),
                       trailing: AppIcons.email(),
@@ -135,7 +135,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                     CustomTextField(
                       obscureText: _passwordObscureText,
                       controller: _passwordController,
-                      hintText: 'Password',
+                      hintText: context.localize!.password,
                       padding:
                           EdgeInsets.only(left: 16.w, right: 16.w, top: 29.h),
                       trailing: GestureDetector(
@@ -149,7 +149,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                     ),
                     CustomTextField(
                       controller: _confirmPasswordController,
-                      hintText: 'Confirm password',
+                      hintText: context.localize!.confirmPassword,
                       padding:
                           EdgeInsets.only(left: 16.w, right: 16.w, top: 29.h),
                       trailing: GestureDetector(
@@ -184,7 +184,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                             }
                           },
                           child: Text(
-                            'Sing Up',
+                            context.localize!.signUp,
                             style: AppTypography.font17
                                 .copyWith(fontWeight: FontWeight.w700),
                           ),
@@ -202,7 +202,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                           ),
                         ),
                         child: Text(
-                          'Sing In',
+                          context.localize!.signIn,
                           style: AppTypography.font17
                               .copyWith(color: Colors.black),
                         ),
