@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (_) => ProfileBloc(userRepository: UserRepository()),
           )
-        ], child: SplashScreen()),
+        ], child: MainScreen()),
       ),
     );
   }

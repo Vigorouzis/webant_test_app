@@ -251,8 +251,33 @@ class _NewImagesTabState extends State<NewImagesTab> {
     return BlocBuilder<LoadImageBloc, LoadImageState>(
       builder: (context, state) {
         if (state is LoadImageFailed) {
-          return Center(
-            child: Text('Sorry!'),
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('assets/icons/webant_logo_error.png'),
+              Padding(
+                padding: EdgeInsets.only(top: 8.h),
+                child: Text(
+                  'Sorry!',
+                  style:
+                      AppTypography.font17.copyWith(color: Color(0xFFC4C4C4)),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 8.h),
+                child: Text(
+                  'There is no pictures.',
+                  style:
+                      AppTypography.font12.copyWith(color: Color(0xFFC4C4C4)),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Text(
+                'Please come back later.',
+                style: AppTypography.font12.copyWith(color: Color(0xFFC4C4C4)),
+                textAlign: TextAlign.center,
+              ),
+            ],
           );
         }
 
@@ -342,8 +367,33 @@ class _PopularImagesTabState extends State<PopularImagesTab> {
     return BlocBuilder<LoadPopularImageBloc, LoadPopularImageState>(
       builder: (context, state) {
         if (state is LoadPopularImageFailed) {
-          return Center(
-            child: Text('Sorry!'),
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('assets/icons/webant_logo_error.png'),
+              Padding(
+                padding: EdgeInsets.only(top: 8.h),
+                child: Text(
+                  'Sorry!',
+                  style:
+                      AppTypography.font17.copyWith(color: Color(0xFFC4C4C4)),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 8.h),
+                child: Text(
+                  'There is no pictures.',
+                  style:
+                      AppTypography.font12.copyWith(color: Color(0xFFC4C4C4)),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Text(
+                'Please come back later.',
+                style: AppTypography.font12.copyWith(color: Color(0xFFC4C4C4)),
+                textAlign: TextAlign.center,
+              ),
+            ],
           );
         }
 
