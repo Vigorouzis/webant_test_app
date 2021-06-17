@@ -1,12 +1,13 @@
 import 'package:dio/dio.dart';
+import 'package:webant_test_app/models/image.dart';
 import 'package:webant_test_app/utils/api_constants.dart';
 
 class ImageApiProvider {
   Dio _dio = Dio();
-  List<String?>? _newImages = [];
-  List<String?>? _popularImages = [];
+  List<ImageModel?>? _newImages = [];
+  List<ImageModel?>? _popularImages = [];
 
-  Future<List<String?>?> getNewImage(
+  Future<List<ImageModel?>?> getNewImage(
       int? page, int? limit, bool? isRefresh) async {
     var response = await _dio.get(
         '${ApiConstants.imageURL}?new=true&popular=false&page=$page&limit=$limit');
@@ -17,15 +18,16 @@ class ImageApiProvider {
       }
 
       for (var i = 0; i < limit!; i++) {
-        _newImages?.add(response.data['data'][i]['image']['name']);
+        _newImages!.add(ImageModel.fromJson(response.data['data'][i]));
       }
+
       return _newImages;
     } else {
       throw Exception('Failed to load images');
     }
   }
 
-  Future<List<String?>?> getPopularImage(
+  Future<List<ImageModel?>?> getPopularImage(
       int? page, int? limit, bool? isRefresh) async {
     var response = await _dio.get(
         '${ApiConstants.imageURL}?new=false&popular=true&page=$page&limit=$limit');
@@ -36,7 +38,7 @@ class ImageApiProvider {
       }
 
       for (var i = 0; i < limit!; i++) {
-        _popularImages?.add(response.data['data'][i]['image']['name']);
+        _popularImages!.add(ImageModel.fromJson(response.data['data'][i]));
       }
       return _popularImages;
     } else {

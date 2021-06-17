@@ -21,7 +21,7 @@ class LoadImageBloc extends Bloc<LoadImageEvent, LoadImageState> {
         try {
           var response = await _imageRepository.getNewImage(
               event.page, event.limit, event.isRefresh);
-          yield LoadImageSuccess(newImageFileNameList: response);
+          yield LoadImageSuccess(newImageList: response);
         } catch (_) {
           yield LoadImageFailed();
         }

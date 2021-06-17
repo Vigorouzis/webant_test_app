@@ -9,6 +9,7 @@ import 'package:webant_test_app/blocs/load_popular_images_bloc/load_popular_imag
 import 'package:webant_test_app/blocs/load_popular_images_bloc/load_popular_images_event.dart';
 import 'package:webant_test_app/blocs/load_popular_images_bloc/load_popular_images_state.dart';
 import 'package:webant_test_app/resources/image_api/image_repository.dart';
+import 'package:webant_test_app/screens/detail_image_screen.dart';
 import 'package:webant_test_app/utils/utils.dart';
 import 'package:webant_test_app/widgets/icons.dart';
 
@@ -299,17 +300,26 @@ class _NewImagesTabState extends State<NewImagesTab> {
                     childAspectRatio: 3 / 2,
                     crossAxisSpacing: 20,
                     mainAxisSpacing: 20),
-                itemCount: state.newImageFileNameList!.length + 1,
+                itemCount: state.newImageList!.length + 1,
                 itemBuilder: (context, index) {
-                  if (index == state.newImageFileNameList?.length) {
+                  if (index == state.newImageList?.length) {
                     return CupertinoActivityIndicator();
                   } else {
-                    return Container(
-                      width: 166.w,
-                      height: 166.h,
-                      child: CachedNetworkImage(
-                        imageUrl:
-                            'http://gallery.dev.webant.ru/media/${state.newImageFileNameList?[index]}',
+                    return GestureDetector(
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => DetailImageScreen(
+                            image: state.newImageList![index],
+                          ),
+                        ),
+                      ),
+                      child: Container(
+                        width: 166.w,
+                        height: 166.h,
+                        child: CachedNetworkImage(
+                          imageUrl:
+                              'http://gallery.dev.webant.ru/media/${state.newImageList?[index]!.name}',
+                        ),
                       ),
                     );
                   }
@@ -425,7 +435,7 @@ class _PopularImagesTabState extends State<PopularImagesTab> {
                       height: 166.h,
                       child: CachedNetworkImage(
                         imageUrl:
-                            'http://gallery.dev.webant.ru/media/${state.popularImageFileNameList?[index]}',
+                            'http://gallery.dev.webant.ru/media/${state.popularImageFileNameList?[index]!.name}',
                       ),
                     );
                   }
