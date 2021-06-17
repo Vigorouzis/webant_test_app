@@ -1,0 +1,19 @@
+{
+  "welcome": "Welcome!",
+  "createAnAccount": "Create an account",
+  "iAlreadyHaveAnAccount": "I already have an account",
+  "signIn": "Sign In",
+  "email": "Email",
+  "password": "Password",
+  "forgotLoginOrPassword": "Forgot login or password?",
+  "signUp": "Sign Up",
+  "cancel": "Cancel",
+  "new": "New",
+  "popular": "Popular",
+  "search": "Search",
+  "sorry" :"Sorry!",
+  "thereIsNoPictures": "There is no pictures.",
+  "pleaseComeBackLater": "Please come back later.",
+  "add": "Add",
+  "publicationHasBeenModerated": "Publication has been moderated"
+}

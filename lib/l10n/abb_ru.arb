@@ -1,0 +1,19 @@
+{
+  "welcome": "Приветствую!",
+  "createAnAccount": "Создать аккаунт",
+  "iAlreadyHaveAnAccount": "У меня уже есть аккаунт",
+  "signIn": "Войти",
+  "email": "Email",
+  "password": "Пароль",
+  "forgotLoginOrPassword": "Забыли логин или пароль?",
+  "signUp": "Зарегистрироваться",
+  "cancel": "Отмена",
+  "new": "Новые",
+  "popular": "Популярные",
+  "search": "Поиск",
+  "sorry": "Извините!",
+  "thereIsNoPictures": "Нет картинок.",
+  "pleaseComeBackLater": "Пожалуйста, вернитесь позже.",
+  "add": "Добавить",
+  "publicationHasBeenModerated": "Публикация прошла модерацию"
+}
