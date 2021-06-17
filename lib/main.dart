@@ -7,8 +7,8 @@ import 'package:webant_test_app/blocs/profile_bloc/profile_bloc.dart';
 import 'package:webant_test_app/resources/image_api/image_repository.dart';
 import 'package:webant_test_app/resources/user_api/user_repository.dart';
 import 'package:webant_test_app/screens/main_screen.dart';
-import 'package:webant_test_app/screens/profile_screen.dart';
 import 'package:webant_test_app/screens/splash_screen.dart';
+import 'package:webant_test_app/screens/welcome_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,22 +19,25 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(375, 812),
-      builder: () => MaterialApp(
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: MultiBlocProvider(providers: [
+      builder: () => MultiBlocProvider(
+        providers: [
           BlocProvider(
-            create: (_) => LoadImageBloc(imageRepository: ImageRepository()),
+            create: (context) =>
+                LoadImageBloc(imageRepository: ImageRepository()),
           ),
           BlocProvider(
-            create: (_) =>
+            create: (context) =>
                 LoadPopularImageBloc(imageRepository: ImageRepository()),
           ),
           BlocProvider(
-            create: (_) => ProfileBloc(userRepository: UserRepository()),
+            create: (context) => ProfileBloc(userRepository: UserRepository()),
           )
-        ], child: MainScreen()),
+        ],
+        child: MaterialApp(
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+            ),
+            home: SplashScreen()),
       ),
     );
   }

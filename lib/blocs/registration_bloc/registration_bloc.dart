@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webant_test_app/blocs/registration_bloc/registration_event.dart';
 import 'package:webant_test_app/blocs/registration_bloc/registration_state.dart';
 import 'package:webant_test_app/resources/auth_api/auth_repository.dart';
+import 'package:webant_test_app/resources/shared_prefs.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   RegistrationBloc() : super(InitRegistrationState());
@@ -18,6 +19,8 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
           birthday: event.birthday,
           email: event.email,
           password: event.password,
+          phone: event.phone,
+          username: event.username,
         );
         if (response == 'OK') {
           yield RegistrationSuccess();

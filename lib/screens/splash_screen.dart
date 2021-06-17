@@ -1,6 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webant_test_app/blocs/load_image_bloc/load_image_bloc.dart';
+import 'package:webant_test_app/blocs/load_popular_images_bloc/load_popular_images_bloc.dart';
+import 'package:webant_test_app/blocs/profile_bloc/profile_bloc.dart';
+import 'package:webant_test_app/resources/image_api/image_repository.dart';
+import 'package:webant_test_app/resources/user_api/user_repository.dart';
 import 'package:webant_test_app/screens/welcome_screen.dart';
 
 class SplashScreen extends StatefulWidget {

@@ -21,11 +21,11 @@ class CustomAppBar extends StatelessWidget {
               children: [
                 Align(
                   alignment: Alignment.bottomLeft,
-                  child: SizedBox(
-                    width: 46.w,
-                    height: 44.h,
-                    child: GestureDetector(
-                      onTap: () => Navigator.of(context).pop(),
+                  child: GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: SizedBox(
+                      width: 46.w,
+                      height: 44.h,
                       child: leading,
                     ),
                   ),

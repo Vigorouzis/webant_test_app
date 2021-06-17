@@ -14,17 +14,16 @@ class WelcomeScreen extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-
               Padding(
-                padding:  EdgeInsets.only(top: 120.h),
+                padding: EdgeInsets.only(top: 120.h),
                 child: Image.asset('assets/icons/webant_logo.png'),
               ),
-
               Padding(
                 padding: EdgeInsets.only(top: 40.h),
                 child: Text(
                   'Welcome!',
-                  style: AppTypography.font20.copyWith(color: Colors.black, fontWeight: FontWeight.w700),
+                  style: AppTypography.font20.copyWith(
+                      color: Colors.black, fontWeight: FontWeight.w700),
                 ),
               ),
               Padding(
