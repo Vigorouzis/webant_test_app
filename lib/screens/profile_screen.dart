@@ -28,6 +28,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: SafeArea(
         child: BlocBuilder<ProfileBloc, ProfileState>(
           builder: (context, state) {
+            if (state is ProfileFailed) {
+             return Center(
+               child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/icons/webant_logo_error.png'),
+                    Padding(
+                      padding: EdgeInsets.only(top: 8.h),
+                      child: Text(
+                        context.localize!.sorry,
+                        style: AppTypography.font17
+                            .copyWith(color: Color(0xFFC4C4C4)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 8.h),
+                      child: Text(
+                        context.localize!.noProfileData,
+                        style: AppTypography.font12
+                            .copyWith(color: Color(0xFFC4C4C4)),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Text(
+                      context.localize!.pleaseComeBackLater,
+                      style:
+                          AppTypography.font12.copyWith(color: Color(0xFFC4C4C4)),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+             );
+            }
+
             if (state is ProfileLoadingState) {
               return Center(
                 child: CircularProgressIndicator(),
@@ -70,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Row(
                       children: [
                         Text(
-                         context.localize!.loaded,
+                          context.localize!.loaded,
                           style: AppTypography.font12,
                         ),
                         Text(

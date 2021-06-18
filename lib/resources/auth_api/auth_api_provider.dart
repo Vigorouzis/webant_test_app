@@ -12,12 +12,18 @@ class AuthApiProvider {
     String? username,
     String? password,
   }) async {
-    String clientSecret;
-    String clientRandomId;
-    String clientId = await _prefs.read('client_id');
+    String? clientSecret;
+    String? clientRandomId;
 
-    clientSecret = (await getClientSecret(id: clientId))!;
-    clientRandomId = (await getRandomId(id: clientId))!;
+    String? clientId = await _prefs.read('client_id');
+
+    var data =
+        await _dio.get('http://gallery.dev.webant.ru/api/clients/$clientId');
+
+    if (data.statusCode == 200) {
+      clientRandomId = data.data['randomId'];
+      clientSecret = data.data['secret'];
+    }
 
     Response response = await _dio.get(
       '${ApiConstants.singInURL}?client_id=${clientId}_$clientRandomId&grant_type=password&username=$username&password=$password&client_secret=$clientSecret',
@@ -33,26 +39,6 @@ class AuthApiProvider {
     } else {
       return 'Not OK';
     }
-  }
-
-  Future<String?> getClientSecret({required String id}) async {
-    var response =
-        await _dio.get('http://gallery.dev.webant.ru/api/clients/$id');
-
-    if (response.statusCode == 200) {
-      return response.data['secret'];
-    }
-    return null;
-  }
-
-  Future<String?> getRandomId({required String id}) async {
-    var response =
-        await _dio.get('http://gallery.dev.webant.ru/api/clients/$id');
-
-    if (response.statusCode == 200) {
-      return response.data['randomId'];
-    }
-    return null;
   }
 
   Future<String> registrationNewUser({

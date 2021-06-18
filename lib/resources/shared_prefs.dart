@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefs {
-  read(String key) async {
+  Future<dynamic> read(String key) async {
     final prefs = await SharedPreferences.getInstance();
-    return jsonDecode(prefs.getString(key)!) ?? null;
+    var a = prefs.getString(key);
+    print(a);
+    return a;
   }
 
   contains(String key) async {

@@ -24,7 +24,7 @@ class CustomAppBar extends StatelessWidget {
                   child: GestureDetector(
                     onTap: () => Navigator.of(context).pop(),
                     child: SizedBox(
-                      width: 46.w,
+                      width: 60.w,
                       height: 44.h,
                       child: leading,
                     ),

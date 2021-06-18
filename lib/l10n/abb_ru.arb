@@ -27,5 +27,7 @@
   "phone": "Номер телефона",
   "notIndicated": "Не указано",
   "loaded": "Загружено: ",
-  "noPhoto": "Нет фото"
+  "noPhoto": "Нет фото",
+  "notAllFieldsAreFilled": "Не все поля заполнены",
+  "noProfileData": "Нет данных профиля"
 }

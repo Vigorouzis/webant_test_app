@@ -43,6 +43,16 @@ class _MainScreenState extends State<MainScreen>
   }
 
   void _handleTabSelection() {
+    if (_tabController!.indexIsChanging) {
+      switch (_tabController!.index) {
+        case 0:
+          context.read<LoadImageBloc>().add(GetData());
+          break;
+        case 1:
+          context.read<LoadPopularImageBloc>().add(GetPopularData());
+          break;
+      }
+    }
     setState(() {});
   }
 
@@ -193,7 +203,7 @@ class _LoadImageItemScreenState extends State<LoadImageItemScreen> {
         ),
         Expanded(
           child: Container(
-            child: TabBarView(controller: widget._tabController, children: [
+            child: TabBarView(controller: widget._tabController!, children: [
               NewImagesTab(),
               PopularImagesTab(),
             ]),
@@ -213,7 +223,8 @@ class NewImagesTab extends StatefulWidget {
   _NewImagesTabState createState() => _NewImagesTabState();
 }
 
-class _NewImagesTabState extends State<NewImagesTab> {
+class _NewImagesTabState extends State<NewImagesTab>
+    with AutomaticKeepAliveClientMixin<NewImagesTab> {
   ScrollController? _controller;
   int _page = 1;
 
@@ -291,43 +302,55 @@ class _NewImagesTabState extends State<NewImagesTab> {
                   .read<LoadImageBloc>()
                   .add(LoadNewImage(limit: 10, page: _page, isRefresh: true));
             },
-            child: GridView.builder(
-                controller: _controller,
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 200,
-                    childAspectRatio: 3 / 2,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20),
-                itemCount: state.newImageList!.length + 1,
-                itemBuilder: (context, index) {
-                  if (index == state.newImageList?.length) {
-                    return CupertinoActivityIndicator();
-                  } else {
-                    return GestureDetector(
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => DetailImageScreen(
-                            image: state.newImageList![index],
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: GridView.builder(
+                  controller: _controller,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 5.0,
+                    mainAxisSpacing: 5.0,
+                  ),
+                  itemCount: state.newImageList!.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == state.newImageList?.length) {
+                      return CupertinoActivityIndicator();
+                    } else {
+                      return GestureDetector(
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => DetailImageScreen(
+                              image: state.newImageList![index],
+                            ),
                           ),
                         ),
-                      ),
-                      child: Container(
-                        width: 166.w,
-                        height: 166.h,
                         child: CachedNetworkImage(
                           imageUrl:
                               'http://gallery.dev.webant.ru/media/${state.newImageList?[index]!.name}',
+                          fit: BoxFit.cover,
+                          imageBuilder: (context, imageProvider) => Container(
+                            width: 166.w,
+                            height: 166.h,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                  image: imageProvider, fit: BoxFit.fill),
+                            ),
+                          ),
                         ),
-                      ),
-                    );
-                  }
-                }),
+                      );
+                    }
+                  }),
+            ),
           );
         }
         return Container();
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class PopularImagesTab extends StatefulWidget {
@@ -337,7 +360,8 @@ class PopularImagesTab extends StatefulWidget {
   _PopularImagesTabState createState() => _PopularImagesTabState();
 }
 
-class _PopularImagesTabState extends State<PopularImagesTab> {
+class _PopularImagesTabState extends State<PopularImagesTab>
+    with AutomaticKeepAliveClientMixin<PopularImagesTab> {
   ScrollController? _controller;
   int _page = 1;
   int _countOfPages = 0;
@@ -416,32 +440,52 @@ class _PopularImagesTabState extends State<PopularImagesTab> {
                   .read<LoadPopularImageBloc>()
                   .add(LoadPopularImage(limit: 10, page: 1, isRefresh: true));
             },
-            child: GridView.builder(
-                controller: _controller,
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 200,
-                    childAspectRatio: 3 / 2,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20),
-                itemCount: state.popularImageFileNameList!.length + 1,
-                itemBuilder: (context, index) {
-                  if (index == state.popularImageFileNameList?.length) {
-                    return CupertinoActivityIndicator();
-                  } else {
-                    return Container(
-                      width: 166.w,
-                      height: 166.h,
-                      child: CachedNetworkImage(
-                        imageUrl:
-                            'http://gallery.dev.webant.ru/media/${state.popularImageFileNameList?[index]!.name}',
-                      ),
-                    );
-                  }
-                }),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: GridView.builder(
+                  controller: _controller,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 5.0,
+                    mainAxisSpacing: 5.0,
+                  ),
+                  itemCount: state.popularImageFileNameList!.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == state.popularImageFileNameList?.length) {
+                      return CupertinoActivityIndicator();
+                    } else {
+                      return GestureDetector(
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => DetailImageScreen(
+                              image: state.popularImageFileNameList![index],
+                            ),
+                          ),
+                        ),
+                        child: CachedNetworkImage(
+                          imageUrl:
+                              'http://gallery.dev.webant.ru/media/${state.popularImageFileNameList?[index]!.name}',
+                          imageBuilder: (context, imageProvider) => Container(
+                            width: 166.w,
+                            height: 166.h,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                  image: imageProvider, fit: BoxFit.fill),
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  }),
+            ),
           );
         }
         return Container();
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

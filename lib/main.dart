@@ -7,8 +7,9 @@ import 'package:webant_test_app/blocs/load_popular_images_bloc/load_popular_imag
 import 'package:webant_test_app/blocs/profile_bloc/profile_bloc.dart';
 import 'package:webant_test_app/resources/image_api/image_repository.dart';
 import 'package:webant_test_app/resources/user_api/user_repository.dart';
-import 'package:webant_test_app/screens/splash_screen.dart';
+import 'package:webant_test_app/screens/main_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:webant_test_app/screens/welcome_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               primarySwatch: Colors.blue,
             ),
-            home: SplashScreen()),
+            home: MainScreen()),
       ),
     );
   }

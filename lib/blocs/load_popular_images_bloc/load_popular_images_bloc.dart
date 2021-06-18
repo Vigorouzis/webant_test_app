@@ -22,14 +22,18 @@ class LoadPopularImageBloc
           connectivityResult == ConnectivityResult.wifi) {
         try {
           var response = await _imageRepository.getPopularImage(
-              event.page, event.limit, event.isRefresh);
-          yield LoadPopularImageSuccess(popularImageFileNameList:  response);
+              event.page, event.limit, event.isRefresh, event.isTabChanged);
+          yield LoadPopularImageSuccess(popularImageFileNameList: response);
         } catch (_) {
           yield LoadPopularImageFailed();
         }
       } else {
         yield LoadPopularImageFailed();
       }
+    }
+    if (event is GetPopularData) {
+      var response = _imageRepository.getNewImageList();
+      yield LoadPopularImageSuccess(popularImageFileNameList: response);
     }
   }
 }

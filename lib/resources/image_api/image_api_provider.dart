@@ -8,7 +8,8 @@ class ImageApiProvider {
   List<ImageModel?>? _popularImages = [];
 
   Future<List<ImageModel?>?> getNewImage(
-      int? page, int? limit, bool? isRefresh) async {
+      int? page, int? limit, bool? isRefresh, bool? isTabChanged) async {
+
     var response = await _dio.get(
         '${ApiConstants.imageURL}?new=true&popular=false&page=$page&limit=$limit');
 
@@ -28,7 +29,9 @@ class ImageApiProvider {
   }
 
   Future<List<ImageModel?>?> getPopularImage(
-      int? page, int? limit, bool? isRefresh) async {
+      int? page, int? limit, bool? isRefresh, bool? isTabChanged) async {
+
+
     var response = await _dio.get(
         '${ApiConstants.imageURL}?new=false&popular=true&page=$page&limit=$limit');
 
@@ -52,6 +55,14 @@ class ImageApiProvider {
 
   void clearPopularData() {
     _popularImages?.clear();
+  }
+
+  List<ImageModel?>? getNewImageList() {
+    return _newImages!;
+  }
+
+  List<ImageModel?>? getPopularImageList() {
+    return _popularImages!;
   }
 
   Future<int?>? getNewCountOfPages() async {
