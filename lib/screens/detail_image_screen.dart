@@ -12,6 +12,9 @@ class DetailImageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    image!.dateCreate =
+        "${image!.dateCreate!.substring(9, 11)}.${image!.dateCreate!.substring(6, 8)}.${image!.dateCreate!.substring(1, 5)}";
+
     return Scaffold(
       body: SafeArea(
         child: Column(

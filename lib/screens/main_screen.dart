@@ -8,7 +8,7 @@ import 'package:webant_test_app/blocs/load_image_bloc/load_image_state.dart';
 import 'package:webant_test_app/blocs/load_popular_images_bloc/load_popular_images_bloc.dart';
 import 'package:webant_test_app/blocs/load_popular_images_bloc/load_popular_images_event.dart';
 import 'package:webant_test_app/blocs/load_popular_images_bloc/load_popular_images_state.dart';
-import 'package:webant_test_app/resources/image_api/image_repository.dart';
+import 'package:webant_test_app/api/image_api/image_repository.dart';
 import 'package:webant_test_app/screens/detail_image_screen.dart';
 import 'package:webant_test_app/screens/profile_screen.dart';
 import 'package:webant_test_app/utils/utils.dart';
@@ -134,7 +134,7 @@ class _LoadImageItemScreenState extends State<LoadImageItemScreen> {
             child: TextField(
               controller: widget._searchController,
               decoration: InputDecoration(
-                fillColor: Color(0xFF8E8E93).withOpacity(0.12),
+                fillColor: AppColors.grey8E8E93.withOpacity(0.12),
                 filled: true,
                 hintText: context.localize!.search,
                 hintStyle: AppTypography.font17.copyWith(
@@ -163,7 +163,7 @@ class _LoadImageItemScreenState extends State<LoadImageItemScreen> {
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: widget._tabController?.index == 0
-                          ? BorderSide(color: Color(0xFFCF497E), width: 2)
+                          ? BorderSide(color: AppColors.pinkCF497E, width: 2)
                           : BorderSide.none,
                     ),
                   ),
@@ -171,7 +171,7 @@ class _LoadImageItemScreenState extends State<LoadImageItemScreen> {
                     child: Text(
                       context.localize!.newImages,
                       style: AppTypography.font17.copyWith(
-                        color: Color(0xFFC4C4C4),
+                        color: AppColors.greyC4C4C4,
                       ),
                     ),
                   ),
@@ -184,7 +184,7 @@ class _LoadImageItemScreenState extends State<LoadImageItemScreen> {
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: widget._tabController?.index == 1
-                          ? BorderSide(color: Color(0xFFCF497E), width: 2)
+                          ? BorderSide(color: AppColors.pinkCF497E, width: 2)
                           : BorderSide.none,
                     ),
                   ),
@@ -192,7 +192,7 @@ class _LoadImageItemScreenState extends State<LoadImageItemScreen> {
                     child: Text(
                       context.localize!.popular,
                       style: AppTypography.font17.copyWith(
-                        color: Color(0xFFC4C4C4),
+                        color: AppColors.greyC4C4C4,
                       ),
                     ),
                   ),
@@ -270,7 +270,7 @@ class _NewImagesTabState extends State<NewImagesTab>
                 child: Text(
                   context.localize!.sorry,
                   style:
-                      AppTypography.font17.copyWith(color: Color(0xFFC4C4C4)),
+                      AppTypography.font17.copyWith(color: AppColors.greyC4C4C4),
                 ),
               ),
               Padding(
@@ -278,13 +278,13 @@ class _NewImagesTabState extends State<NewImagesTab>
                 child: Text(
                   context.localize!.thereIsNoPictures,
                   style:
-                      AppTypography.font12.copyWith(color: Color(0xFFC4C4C4)),
+                      AppTypography.font12.copyWith(color: AppColors.greyC4C4C4),
                   textAlign: TextAlign.center,
                 ),
               ),
               Text(
                 context.localize!.pleaseComeBackLater,
-                style: AppTypography.font12.copyWith(color: Color(0xFFC4C4C4)),
+                style: AppTypography.font12.copyWith(color: AppColors.greyC4C4C4),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -408,7 +408,7 @@ class _PopularImagesTabState extends State<PopularImagesTab>
                 child: Text(
                   context.localize!.sorry,
                   style:
-                      AppTypography.font17.copyWith(color: Color(0xFFC4C4C4)),
+                      AppTypography.font17.copyWith(color: AppColors.greyC4C4C4),
                 ),
               ),
               Padding(
@@ -416,13 +416,13 @@ class _PopularImagesTabState extends State<PopularImagesTab>
                 child: Text(
                   context.localize!.thereIsNoPictures,
                   style:
-                      AppTypography.font12.copyWith(color: Color(0xFFC4C4C4)),
+                      AppTypography.font12.copyWith(color: AppColors.greyC4C4C4),
                   textAlign: TextAlign.center,
                 ),
               ),
               Text(
                 context.localize!.pleaseComeBackLater,
-                style: AppTypography.font12.copyWith(color: Color(0xFFC4C4C4)),
+                style: AppTypography.font12.copyWith(color: AppColors.greyC4C4C4),
                 textAlign: TextAlign.center,
               ),
             ],

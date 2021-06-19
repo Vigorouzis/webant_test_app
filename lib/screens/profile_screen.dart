@@ -16,6 +16,8 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  String? _birthdayDate = '';
+
   @override
   void initState() {
     context.read<ProfileBloc>().add(GetDataAboutProfile());
@@ -29,8 +31,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: BlocBuilder<ProfileBloc, ProfileState>(
           builder: (context, state) {
             if (state is ProfileFailed) {
-             return Center(
-               child: Column(
+              return Center(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset('assets/icons/webant_logo_error.png'),
@@ -39,7 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Text(
                         context.localize!.sorry,
                         style: AppTypography.font17
-                            .copyWith(color: Color(0xFFC4C4C4)),
+                            .copyWith(color: AppColors.greyC4C4C4),
                       ),
                     ),
                     Padding(
@@ -47,19 +49,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Text(
                         context.localize!.noProfileData,
                         style: AppTypography.font12
-                            .copyWith(color: Color(0xFFC4C4C4)),
+                            .copyWith(color: AppColors.greyC4C4C4),
                         textAlign: TextAlign.center,
                       ),
                     ),
                     Text(
                       context.localize!.pleaseComeBackLater,
-                      style:
-                          AppTypography.font12.copyWith(color: Color(0xFFC4C4C4)),
+                      style: AppTypography.font12
+                          .copyWith(color: AppColors.greyC4C4C4),
                       textAlign: TextAlign.center,
                     ),
                   ],
                 ),
-             );
+              );
             }
 
             if (state is ProfileLoadingState) {
@@ -68,6 +70,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               );
             }
             if (state is ProfileSuccess) {
+              _birthdayDate = "${state.user.birthday.substring(8, 10)}.${state.user.birthday.substring(5, 7)}.${state.user.birthday.substring(0, 4)}";
+
               return Column(
                 children: [
                   CustomAppBar(
@@ -81,7 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         width: 100.h,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: Color(0xFFC4C4C4))),
+                            border: Border.all(color: AppColors.greyC4C4C4)),
                         child: AppIcons.profilePhoto()),
                   ),
                   Padding(
@@ -94,9 +98,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Padding(
                     padding: EdgeInsets.only(top: 8.h),
                     child: Text(
-                      state.user.birthday,
+                      _birthdayDate!,
                       style: AppTypography.font12
-                          .copyWith(color: Color(0xFFC4C4C4)),
+                          .copyWith(color: AppColors.greyC4C4C4),
                     ),
                   ),
                   Padding(
@@ -110,14 +114,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Text(
                           '999+',
                           style: AppTypography.font12
-                              .copyWith(color: Color(0xFFC4C4C4)),
+                              .copyWith(color: AppColors.greyC4C4C4),
                         ),
                       ],
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 10.h),
-                    child: Divider(height: 2.h, color: Color(0xFFC4C4C4)),
+                    child: Divider(height: 2.h, color: AppColors.greyC4C4C4),
                   ),
                   state.user.uploadImages!.isNotEmpty
                       ? Expanded(

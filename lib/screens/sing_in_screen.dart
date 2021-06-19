@@ -76,7 +76,7 @@ class _SingInScreenState extends State<SingInScreen> {
                                   Container(
                                     width: 94.w,
                                     height: 2.h,
-                                    color: Color(0xFFCF497E),
+                                    color: AppColors.pinkCF497E,
                                   )
                                 ],
                               ),
@@ -85,15 +85,15 @@ class _SingInScreenState extends State<SingInScreen> {
                           CustomTextField(
                             controller: _usernameController,
                             hintText: context.localize!.username,
-                            padding:
-                                EdgeInsets.only(left: 16.w, right: 16.w, top: 50.h),
+                            padding: EdgeInsets.only(
+                                left: 16.w, right: 16.w, top: 50.h),
                             trailing: AppIcons.email(),
                           ),
                           CustomTextField(
                             controller: _passwordController,
                             hintText: context.localize!.password,
-                            padding:
-                                EdgeInsets.only(left: 16.w, right: 16.w, top: 29.h),
+                            padding: EdgeInsets.only(
+                                left: 16.w, right: 16.w, top: 29.h),
                             trailing: AppIcons.eye(),
                           ),
                           Padding(
@@ -103,7 +103,7 @@ class _SingInScreenState extends State<SingInScreen> {
                               child: Text(
                                 context.localize!.forgotLoginOrPassword,
                                 style: AppTypography.font13
-                                    .copyWith(color: Color(0xFFC4C4C4)),
+                                    .copyWith(color: AppColors.greyC4C4C4),
                               ),
                             ),
                           ),
@@ -123,11 +123,13 @@ class _SingInScreenState extends State<SingInScreen> {
                                       context.read<AuthBloc>().add(
                                             AuthorizationEvent(
                                               email: _usernameController?.text,
-                                              password: _passwordController?.text,
+                                              password:
+                                                  _passwordController?.text,
                                             ),
                                           );
                                     } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
                                         SnackBar(
                                           content: Text(context
                                               .localize!.notAllFieldsAreFilled),
@@ -141,7 +143,7 @@ class _SingInScreenState extends State<SingInScreen> {
                                         .copyWith(fontWeight: FontWeight.w700),
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                      primary: Color(0xFF1D1D1D)),
+                                      primary: AppColors.black1D1D1D),
                                 );
                               }()),
                             ),

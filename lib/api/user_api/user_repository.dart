@@ -1,5 +1,5 @@
 import 'package:webant_test_app/models/user.dart';
-import 'package:webant_test_app/resources/user_api/user_api_provider.dart';
+import 'package:webant_test_app/api/user_api/user_api_provider.dart';
 
 class UserRepository {
   UserApiProvider _apiProvider = UserApiProvider();

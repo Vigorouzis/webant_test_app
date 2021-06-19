@@ -41,7 +41,8 @@ class WelcomeScreen extends StatelessWidget {
                       context.localize!.createAnAccount,
                       style: AppTypography.font14,
                     ),
-                    style: ElevatedButton.styleFrom(primary: Color(0xFF1D1D1D)),
+                    style: ElevatedButton.styleFrom(
+                        primary: AppColors.black1D1D1D),
                   ),
                 ),
               ),
@@ -57,11 +58,11 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                     context.localize!.iAlreadyHaveAnAccount,
+                      context.localize!.iAlreadyHaveAnAccount,
                       style: AppTypography.font14.copyWith(color: Colors.black),
                     ),
                     style: ElevatedButton.styleFrom(
-                      onSurface: Color(0xFF1D1D1D),
+                      onSurface: AppColors.black1D1D1D,
                       primary: Colors.white,
                     ),
                   ),

@@ -42,16 +42,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ),
             contentPadding: EdgeInsets.only(top: 7.h, left: 10.w),
             hintStyle: AppTypography.font17.copyWith(
-              color: Color(0xFFC4C4C4),
+              color: AppColors.greyC4C4C4,
             ),
             suffixIcon: widget.trailing,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1),
+              borderSide: BorderSide(color: AppColors.greyC4C4C4, width: 1),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide(color: Color(0xFFC4C4C4), width: 1),
+              borderSide: BorderSide(color: AppColors.greyC4C4C4, width: 1),
             ),
           ),
         ),

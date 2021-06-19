@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:webant_test_app/models/user.dart';
-import 'package:webant_test_app/resources/shared_prefs.dart';
+import 'package:webant_test_app/api/shared_prefs.dart';
 import 'package:webant_test_app/utils/api_constants.dart';
 
 class UserApiProvider {

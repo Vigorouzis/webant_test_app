@@ -94,7 +94,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                                   Container(
                                     width: 94.w,
                                     height: 2.h,
-                                    color: Color(0xFFCF497E),
+                                    color: AppColors.pinkCF497E,
                                   )
                                 ],
                               ),
@@ -221,7 +221,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                                           fontWeight: FontWeight.w700),
                                     ),
                                     style: ElevatedButton.styleFrom(
-                                        primary: Color(0xFF1D1D1D)),
+                                        primary: AppColors.black1D1D1D),
                                   );
                                 }())),
                           ),

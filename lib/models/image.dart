@@ -1,6 +1,6 @@
 class ImageModel {
   final String? name;
-  final String? dateCreate;
+   String? dateCreate;
   final String? user;
   final String? description;
 

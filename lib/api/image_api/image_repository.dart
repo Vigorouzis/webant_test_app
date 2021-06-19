@@ -1,5 +1,5 @@
 import 'package:webant_test_app/models/image.dart';
-import 'package:webant_test_app/resources/image_api/image_api_provider.dart';
+import 'package:webant_test_app/api/image_api/image_api_provider.dart';
 
 class ImageRepository {
   ImageApiProvider _apiProvider = ImageApiProvider();

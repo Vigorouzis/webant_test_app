@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webant_test_app/blocs/load_popular_images_bloc/load_popular_images_event.dart';
 import 'package:webant_test_app/blocs/load_popular_images_bloc/load_popular_images_state.dart';
-import 'package:webant_test_app/resources/image_api/image_repository.dart';
+import 'package:webant_test_app/api/image_api/image_repository.dart';
 import 'package:connectivity/connectivity.dart';
 
 class LoadPopularImageBloc
