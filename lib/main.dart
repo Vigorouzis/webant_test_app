@@ -9,6 +9,7 @@ import 'package:webant_test_app/resources/image_api/image_repository.dart';
 import 'package:webant_test_app/resources/user_api/user_repository.dart';
 import 'package:webant_test_app/screens/main_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:webant_test_app/screens/splash_screen.dart';
 import 'package:webant_test_app/screens/welcome_screen.dart';
 
 void main() {
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               primarySwatch: Colors.blue,
             ),
-            home: MainScreen()),
+            home: WelcomeScreen()),
       ),
     );
   }
