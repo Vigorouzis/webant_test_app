@@ -7,11 +7,14 @@ import 'package:webant_test_app/blocs/profile_bloc/profile_bloc.dart';
 import 'package:webant_test_app/api/image_api/image_repository.dart';
 import 'package:webant_test_app/api/shared_prefs.dart';
 import 'package:webant_test_app/api/user_api/user_repository.dart';
+import 'package:webant_test_app/locator.dart';
 import 'package:webant_test_app/screens/main_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:webant_test_app/screens/welcome_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await setDI();
   runApp(MyApp());
 }
 

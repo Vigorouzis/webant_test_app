@@ -2,11 +2,12 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:webant_test_app/api/shared_prefs.dart';
+import 'package:webant_test_app/locator.dart';
 import 'package:webant_test_app/utils/api_constants.dart';
 
 class AuthApiProvider {
-  Dio _dio = Dio();
-  SharedPrefs _prefs = SharedPrefs();
+  Dio _dio = locator.get<Dio>();
+  var _prefs = locator.get<SharedPrefs>();
 
   Future<String?> authorization({
     String? username,
@@ -26,7 +27,7 @@ class AuthApiProvider {
     }
 
     Response response = await _dio.get(
-      '${ApiConstants.singInURL}?client_id=${clientId}_$clientRandomId&grant_type=password&username=$username&password=$password&client_secret=$clientSecret',
+      '${ApiConstants.tokenURL}?client_id=${clientId}_$clientRandomId&grant_type=password&username=$username&password=$password&client_secret=$clientSecret',
       options: Options(
         contentType: 'application/json',
       ),

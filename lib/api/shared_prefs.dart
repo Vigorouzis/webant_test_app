@@ -3,25 +3,25 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefs {
+  SharedPreferences? _preferences;
+
+  SharedPrefs({SharedPreferences? preferences}) : _preferences = preferences;
+
   Future<dynamic> read(String key) async {
-    final prefs = await SharedPreferences.getInstance();
-    var a = prefs.getString(key);
+    var a = _preferences?.getString(key);
     print(a);
     return a;
   }
 
-  contains(String key) async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.containsKey(key);
+  Future<dynamic> contains(String key) async {
+    return _preferences?.containsKey(key);
   }
 
-  save(String key, value) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(key, jsonEncode(value));
+  Future<dynamic> save(String key, value) async {
+    _preferences?.setString(key, jsonEncode(value));
   }
 
-  clear() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.clear();
+  Future<dynamic> clear() async {
+    _preferences?.clear();
   }
 }

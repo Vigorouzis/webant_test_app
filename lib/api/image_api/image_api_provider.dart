@@ -1,15 +1,16 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
+import 'package:webant_test_app/locator.dart';
 import 'package:webant_test_app/models/image.dart';
 import 'package:webant_test_app/utils/api_constants.dart';
 
 class ImageApiProvider {
-  Dio _dio = Dio();
+  var _dio = locator.get<Dio>();
   List<ImageModel?>? _newImages = [];
   List<ImageModel?>? _popularImages = [];
 
   Future<List<ImageModel?>?> getNewImage(
       int? page, int? limit, bool? isRefresh, bool? isTabChanged) async {
-
     var response = await _dio.get(
         '${ApiConstants.imageURL}?new=true&popular=false&page=$page&limit=$limit');
 
@@ -30,8 +31,6 @@ class ImageApiProvider {
 
   Future<List<ImageModel?>?> getPopularImage(
       int? page, int? limit, bool? isRefresh, bool? isTabChanged) async {
-
-
     var response = await _dio.get(
         '${ApiConstants.imageURL}?new=false&popular=true&page=$page&limit=$limit');
 

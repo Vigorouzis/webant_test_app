@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:webant_test_app/locator.dart';
 import 'package:webant_test_app/models/user.dart';
 import 'package:webant_test_app/api/shared_prefs.dart';
 import 'package:webant_test_app/utils/api_constants.dart';
 
 class UserApiProvider {
-  Dio _dio = Dio();
-  SharedPrefs _prefs = SharedPrefs();
+  var _dio = locator.get<Dio>();
+  var _prefs = locator.get<SharedPrefs>();
 
   Future<User?> getProfileInfo() async {
     var clientId = await _prefs.read('client_id');

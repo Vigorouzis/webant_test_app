@@ -261,33 +261,44 @@ class _NewImagesTabState extends State<NewImagesTab>
     return BlocBuilder<LoadImageBloc, LoadImageState>(
       builder: (context, state) {
         if (state is LoadImageFailed) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset('assets/icons/webant_logo_error.png'),
-              Padding(
-                padding: EdgeInsets.only(top: 8.h),
-                child: Text(
-                  context.localize!.sorry,
-                  style:
-                      AppTypography.font17.copyWith(color: AppColors.greyC4C4C4),
-                ),
+          return Center(
+            child: RefreshIndicator(
+              onRefresh: () async {
+                _page = 1;
+                context
+                    .read<LoadImageBloc>()
+                    .add(LoadNewImage(limit: 10, page: _page, isRefresh: true));
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset('assets/icons/webant_logo_error.png'),
+                  Padding(
+                    padding: EdgeInsets.only(top: 8.h),
+                    child: Text(
+                      context.localize!.sorry,
+                      style: AppTypography.font17
+                          .copyWith(color: AppColors.greyC4C4C4),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 8.h),
+                    child: Text(
+                      context.localize!.thereIsNoPictures,
+                      style: AppTypography.font12
+                          .copyWith(color: AppColors.greyC4C4C4),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Text(
+                    context.localize!.pleaseComeBackLater,
+                    style: AppTypography.font12
+                        .copyWith(color: AppColors.greyC4C4C4),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
-              Padding(
-                padding: EdgeInsets.only(top: 8.h),
-                child: Text(
-                  context.localize!.thereIsNoPictures,
-                  style:
-                      AppTypography.font12.copyWith(color: AppColors.greyC4C4C4),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Text(
-                context.localize!.pleaseComeBackLater,
-                style: AppTypography.font12.copyWith(color: AppColors.greyC4C4C4),
-                textAlign: TextAlign.center,
-              ),
-            ],
+            ),
           );
         }
 
@@ -407,22 +418,23 @@ class _PopularImagesTabState extends State<PopularImagesTab>
                 padding: EdgeInsets.only(top: 8.h),
                 child: Text(
                   context.localize!.sorry,
-                  style:
-                      AppTypography.font17.copyWith(color: AppColors.greyC4C4C4),
+                  style: AppTypography.font17
+                      .copyWith(color: AppColors.greyC4C4C4),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.only(top: 8.h),
                 child: Text(
                   context.localize!.thereIsNoPictures,
-                  style:
-                      AppTypography.font12.copyWith(color: AppColors.greyC4C4C4),
+                  style: AppTypography.font12
+                      .copyWith(color: AppColors.greyC4C4C4),
                   textAlign: TextAlign.center,
                 ),
               ),
               Text(
                 context.localize!.pleaseComeBackLater,
-                style: AppTypography.font12.copyWith(color: AppColors.greyC4C4C4),
+                style:
+                    AppTypography.font12.copyWith(color: AppColors.greyC4C4C4),
                 textAlign: TextAlign.center,
               ),
             ],
