@@ -1,3 +1,9 @@
+
+import 'package:json_annotation/json_annotation.dart';
+
+part 'image.g.dart';
+
+@JsonSerializable()
 class ImageModel {
   final String? name;
    String? dateCreate;
@@ -10,12 +16,5 @@ class ImageModel {
       required this.user,
       required this.description});
 
-  factory ImageModel.fromJson(Map<String, dynamic> json) {
-    return ImageModel(
-      user: json['user'],
-      description: json['description'],
-      name: json['image']['name'],
-      dateCreate: json['dateCreate'],
-    );
-  }
+  factory ImageModel.fromJson(Map<String, dynamic> json) => _$ImageModelFromJson(json);
 }
