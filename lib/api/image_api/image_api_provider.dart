@@ -1,14 +1,16 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
+import 'package:webant_test_app/locator.dart';
 import 'package:webant_test_app/models/image.dart';
 import 'package:webant_test_app/utils/api_constants.dart';
 
 class ImageApiProvider {
-  Dio _dio = Dio();
+  var _dio = locator.get<Dio>();
   List<ImageModel?>? _newImages = [];
   List<ImageModel?>? _popularImages = [];
 
   Future<List<ImageModel?>?> getNewImage(
-      int? page, int? limit, bool? isRefresh) async {
+      int? page, int? limit, bool? isRefresh, bool? isTabChanged) async {
     var response = await _dio.get(
         '${ApiConstants.imageURL}?new=true&popular=false&page=$page&limit=$limit');
 
@@ -17,9 +19,10 @@ class ImageApiProvider {
         clearNewData();
       }
 
-      for (var i = 0; i < limit!; i++) {
-        _newImages!.add(ImageModel.fromJson(response.data['data'][i]));
-      }
+      List<dynamic> getImagesList = response.data['data'];
+      getImagesList.forEach((element) {
+        _newImages!.add(ImageModel.fromJson(element));
+      });
 
       return _newImages;
     } else {
@@ -28,7 +31,7 @@ class ImageApiProvider {
   }
 
   Future<List<ImageModel?>?> getPopularImage(
-      int? page, int? limit, bool? isRefresh) async {
+      int? page, int? limit, bool? isRefresh, bool? isTabChanged) async {
     var response = await _dio.get(
         '${ApiConstants.imageURL}?new=false&popular=true&page=$page&limit=$limit');
 
@@ -37,9 +40,10 @@ class ImageApiProvider {
         clearPopularData();
       }
 
-      for (var i = 0; i < limit!; i++) {
-        _popularImages!.add(ImageModel.fromJson(response.data['data'][i]));
-      }
+      List<dynamic> getImagesList = response.data['data'];
+      getImagesList.forEach((element) {
+        _popularImages!.add(ImageModel.fromJson(element));
+      });
       return _popularImages;
     } else {
       throw Exception('Failed to load images');
@@ -52,6 +56,14 @@ class ImageApiProvider {
 
   void clearPopularData() {
     _popularImages?.clear();
+  }
+
+  List<ImageModel?>? getNewImageList() {
+    return _newImages!;
+  }
+
+  List<ImageModel?>? getPopularImageList() {
+    return _popularImages!;
   }
 
   Future<int?>? getNewCountOfPages() async {

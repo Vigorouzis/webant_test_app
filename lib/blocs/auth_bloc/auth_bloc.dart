@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webant_test_app/blocs/auth_bloc/auth_event.dart';
 import 'package:webant_test_app/blocs/auth_bloc/auth_state.dart';
-import 'package:webant_test_app/resources/auth_api/auth_repository.dart';
+import 'package:webant_test_app/api/auth_api/auth_repository.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(InitAuthState());

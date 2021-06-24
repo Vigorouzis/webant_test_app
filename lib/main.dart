@@ -1,20 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:webant_test_app/blocs/load_image_bloc/load_image_bloc.dart';
 import 'package:webant_test_app/blocs/load_popular_images_bloc/load_popular_images_bloc.dart';
 import 'package:webant_test_app/blocs/profile_bloc/profile_bloc.dart';
-import 'package:webant_test_app/resources/image_api/image_repository.dart';
-import 'package:webant_test_app/resources/user_api/user_repository.dart';
-import 'package:webant_test_app/screens/splash_screen.dart';
+import 'package:webant_test_app/api/image_api/image_repository.dart';
+import 'package:webant_test_app/api/shared_prefs.dart';
+import 'package:webant_test_app/api/user_api/user_repository.dart';
+import 'package:webant_test_app/locator.dart';
+import 'package:webant_test_app/screens/main_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:webant_test_app/screens/welcome_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await setDI();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  Future<String?> getAccessToken() async {
+    SharedPrefs _prefs = locator<SharedPrefs>();
+    String? _accessToken = await _prefs.read('access_token');
+    return _accessToken;
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -34,12 +44,21 @@ class MyApp extends StatelessWidget {
           )
         ],
         child: MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-            ),
-            home: SplashScreen()),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: FutureBuilder<String?>(
+              future: getAccessToken(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return MainScreen();
+                } else {
+                  return WelcomeScreen();
+                }
+              }),
+        ),
       ),
     );
   }

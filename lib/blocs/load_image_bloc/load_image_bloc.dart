@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webant_test_app/blocs/load_image_bloc/load_image_event.dart';
 import 'package:webant_test_app/blocs/load_image_bloc/load_image_state.dart';
-import 'package:webant_test_app/resources/image_api/image_repository.dart';
+import 'package:webant_test_app/api/image_api/image_repository.dart';
 import 'package:connectivity/connectivity.dart';
 
 class LoadImageBloc extends Bloc<LoadImageEvent, LoadImageState> {
@@ -20,7 +20,7 @@ class LoadImageBloc extends Bloc<LoadImageEvent, LoadImageState> {
           connectivityResult == ConnectivityResult.wifi) {
         try {
           var response = await _imageRepository.getNewImage(
-              event.page, event.limit, event.isRefresh);
+              event.page, event.limit, event.isRefresh, event.isTabChanged);
           yield LoadImageSuccess(newImageList: response);
         } catch (_) {
           yield LoadImageFailed();
@@ -28,6 +28,10 @@ class LoadImageBloc extends Bloc<LoadImageEvent, LoadImageState> {
       } else {
         yield LoadImageFailed();
       }
+    }
+    if(event is GetData){
+      var response = _imageRepository.getNewImageList();
+       yield LoadImageSuccess(newImageList: response);
     }
   }
 }

@@ -27,5 +27,7 @@
   "phone": "Phone",
   "notIndicated": "Not indicated",
   "loaded": "Loaded: ",
-  "noPhoto": "No photo"
+  "noPhoto": "No photo",
+  "notAllFieldsAreFilled":"Not all fields are filled",
+  "noProfileData": "No profile data"
 }

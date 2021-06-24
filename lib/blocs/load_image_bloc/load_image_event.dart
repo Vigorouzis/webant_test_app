@@ -6,6 +6,12 @@ class LoadNewImage extends LoadImageEvent {
   final int? page;
   final int? limit;
   final bool? isRefresh;
+  final bool? isTabChanged;
 
-  LoadNewImage({this.page, this.limit, this.isRefresh});
+  const LoadNewImage(
+      {this.page, this.limit, this.isRefresh, this.isTabChanged});
+}
+
+class GetData extends LoadImageEvent {
+  const GetData();
 }

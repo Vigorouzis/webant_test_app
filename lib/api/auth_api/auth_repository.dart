@@ -1,4 +1,4 @@
-import 'package:webant_test_app/resources/auth_api/auth_api_provider.dart';
+import 'package:webant_test_app/api/auth_api/auth_api_provider.dart';
 
 class AuthRepository {
   var _authApiProvider = AuthApiProvider();
