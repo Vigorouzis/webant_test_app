@@ -19,9 +19,10 @@ class ImageApiProvider {
         clearNewData();
       }
 
-      for (var i = 0; i < limit!; i++) {
-        _newImages!.add(ImageModel.fromJson(response.data['data'][i]));
-      }
+      List<dynamic> getImagesList = response.data['data'];
+      getImagesList.forEach((element) {
+        _newImages!.add(ImageModel.fromJson(element));
+      });
 
       return _newImages;
     } else {
@@ -39,9 +40,10 @@ class ImageApiProvider {
         clearPopularData();
       }
 
-      for (var i = 0; i < limit!; i++) {
-        _popularImages!.add(ImageModel.fromJson(response.data['data'][i]));
-      }
+      List<dynamic> getImagesList = response.data['data'];
+      getImagesList.forEach((element) {
+        _popularImages!.add(ImageModel.fromJson(element));
+      });
       return _popularImages;
     } else {
       throw Exception('Failed to load images');

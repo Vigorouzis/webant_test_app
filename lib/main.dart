@@ -20,7 +20,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   Future<String?> getAccessToken() async {
-    SharedPrefs _prefs = SharedPrefs();
+    SharedPrefs _prefs = locator<SharedPrefs>();
     String? _accessToken = await _prefs.read('access_token');
     return _accessToken;
   }

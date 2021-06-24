@@ -11,22 +11,22 @@ class TokenInterceptor extends Interceptor {
 
   TokenInterceptor({required this.dio, required this.preferences});
 
-  @override
-  Future onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
-    var tokensEntity = await preferences!.read('access_token');
-    if (tokensEntity.isNotEmpty) {
-      options.headers = {
-        HttpHeaders.authorizationHeader: 'Bearer ${tokensEntity.accessToken}'
-      };
-    }
-
-    return options;
-  }
+  // @override
+  // Future onRequest(
+  //     RequestOptions options, RequestInterceptorHandler handler) async {
+  //   var tokensEntity = await preferences!.read('access_token');
+  //   if (tokensEntity.isNotEmpty) {
+  //     options.headers = {
+  //       HttpHeaders.authorizationHeader: 'Bearer ${tokensEntity.accessToken}'
+  //     };
+  //   }
+  //
+  //   return options;
+  // }
 
   @override
   Future onError(DioError err, ErrorInterceptorHandler handler) async {
-    if ((err.error as String).contains('401') ?? false) {
+    if (err.response!.statusCode == 401) {
       String? refreshToken = await preferences!.read('refresh_token');
       String? clientId = await preferences!.read('client_id');
       String? clientSecret;
