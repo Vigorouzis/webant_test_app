@@ -2,7 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webant_test_app/blocs/registration_bloc/registration_event.dart';
 import 'package:webant_test_app/blocs/registration_bloc/registration_state.dart';
 import 'package:webant_test_app/api/auth_api/auth_repository.dart';
-import 'package:webant_test_app/api/shared_prefs.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   RegistrationBloc() : super(InitRegistrationState());

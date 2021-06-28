@@ -29,5 +29,8 @@
   "loaded": "Loaded: ",
   "noPhoto": "No photo",
   "notAllFieldsAreFilled":"Not all fields are filled",
-  "noProfileData": "No profile data"
+  "noProfileData": "No profile data",
+  "save": "Save",
+  "name": "Name",
+  "description": "Description"
 }

@@ -8,15 +8,19 @@ class CustomTextField extends StatefulWidget {
   final Widget? trailing;
   final String? suffixText;
   final bool obscureText;
+  final int? maxLines;
+  final double? height;
 
   CustomTextField({
     Key? key,
     required this.controller,
     required this.hintText,
     required this.padding,
-    required this.trailing,
+    this.trailing,
     this.suffixText,
     this.obscureText = false,
+    this.maxLines,
+    this.height,
   }) : super(key: key);
 
   @override
@@ -30,8 +34,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
       padding: widget.padding,
       child: Container(
         width: 343.w,
-        height: 36.h,
+        height: widget.height ?? 36.h,
         child: TextField(
+          maxLines: widget.maxLines ?? 1,
           obscureText: widget.obscureText,
           controller: widget.controller,
           decoration: InputDecoration(
@@ -44,7 +49,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             hintStyle: AppTypography.font17.copyWith(
               color: AppColors.greyC4C4C4,
             ),
-            suffixIcon: widget.trailing,
+            suffixIcon: widget.trailing ?? null,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
               borderSide: BorderSide(color: AppColors.greyC4C4C4, width: 1),

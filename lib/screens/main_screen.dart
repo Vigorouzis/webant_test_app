@@ -11,6 +11,7 @@ import 'package:webant_test_app/blocs/load_popular_images_bloc/load_popular_imag
 import 'package:webant_test_app/api/image_api/image_repository.dart';
 import 'package:webant_test_app/screens/detail_image_screen.dart';
 import 'package:webant_test_app/screens/profile_screen.dart';
+import 'package:webant_test_app/screens/send_image_screen.dart';
 import 'package:webant_test_app/utils/utils.dart';
 import 'package:webant_test_app/widgets/icons.dart';
 
@@ -69,9 +70,8 @@ class _MainScreenState extends State<MainScreen>
         tabController: _tabController,
         searchController: _searchController,
       ),
-      LoadImageItemScreen(
-        tabController: _tabController,
-        searchController: _searchController,
+      SendImageScreen(
+        onTabTapped: onTabTapped,
       ),
       ProfileScreen(),
     ];

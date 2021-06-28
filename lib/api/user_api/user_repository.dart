@@ -6,6 +6,20 @@ class UserRepository {
 
   Future<User?> getProfileInfo() => _apiProvider.getProfileInfo();
 
+  Future<String?> sendDataToApi({
+    String? username,
+    String? birthday,
+    String? email,
+    String? phone,
+    String? fullName,
+  }) =>
+      _apiProvider.sendDataToApi(
+          username: username,
+          phone: phone,
+          email: email,
+          birthday: birthday,
+          fullName: fullName);
+
   Future<List<String?>?> getUploadImagesFromUser() =>
       _apiProvider.getUploadImagesFromUser();
 }

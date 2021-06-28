@@ -9,7 +9,6 @@ class SharedPrefs {
 
   Future<dynamic> read(String key) async {
     var a = _preferences?.getString(key);
-    print(a);
     return a;
   }
 
