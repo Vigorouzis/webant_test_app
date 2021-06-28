@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webant_test_app/blocs/profile_bloc/profile_bloc.dart';
 import 'package:webant_test_app/blocs/profile_bloc/profile_event.dart';
 import 'package:webant_test_app/blocs/profile_bloc/profile_state.dart';
+import 'package:webant_test_app/screens/profile_settings_screen.dart';
 import 'package:webant_test_app/widgets/custom_app_bar.dart';
 import 'package:webant_test_app/utils/utils.dart';
 import 'package:webant_test_app/widgets/icons.dart';
@@ -28,127 +29,140 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: BlocBuilder<ProfileBloc, ProfileState>(
-          builder: (context, state) {
-            if (state is ProfileFailed) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/icons/webant_logo_error.png'),
-                    Padding(
-                      padding: EdgeInsets.only(top: 8.h),
-                      child: Text(
-                        context.localize!.sorry,
-                        style: AppTypography.font17
-                            .copyWith(color: AppColors.greyC4C4C4),
+        child: RefreshIndicator(
+          onRefresh: () async =>
+              context.read<ProfileBloc>().add(GetDataAboutProfile()),
+          child: BlocBuilder<ProfileBloc, ProfileState>(
+            builder: (context, state) {
+              if (state is ProfileFailed) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/icons/webant_logo_error.png'),
+                      Padding(
+                        padding: EdgeInsets.only(top: 8.h),
+                        child: Text(
+                          context.localize!.sorry,
+                          style: AppTypography.font17
+                              .copyWith(color: AppColors.greyC4C4C4),
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 8.h),
-                      child: Text(
-                        context.localize!.noProfileData,
+                      Padding(
+                        padding: EdgeInsets.only(top: 8.h),
+                        child: Text(
+                          context.localize!.noProfileData,
+                          style: AppTypography.font12
+                              .copyWith(color: AppColors.greyC4C4C4),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Text(
+                        context.localize!.pleaseComeBackLater,
                         style: AppTypography.font12
                             .copyWith(color: AppColors.greyC4C4C4),
                         textAlign: TextAlign.center,
                       ),
-                    ),
-                    Text(
-                      context.localize!.pleaseComeBackLater,
-                      style: AppTypography.font12
-                          .copyWith(color: AppColors.greyC4C4C4),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              );
-            }
+                    ],
+                  ),
+                );
+              }
 
-            if (state is ProfileLoadingState) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            if (state is ProfileSuccess) {
-              _birthdayDate = "${state.user.birthday.substring(8, 10)}.${state.user.birthday.substring(5, 7)}.${state.user.birthday.substring(0, 4)}";
-
-              return Column(
-                children: [
-                  CustomAppBar(
-                    leading: AppIcons.backArrow(),
-                    trailing: AppIcons.settings(),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 21.h),
-                    child: Container(
-                        height: 100.h,
-                        width: 100.h,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: AppColors.greyC4C4C4)),
-                        child: AppIcons.profilePhoto()),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10.h),
-                    child: Text(
-                      state.user.username,
-                      style: AppTypography.font17,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 8.h),
-                    child: Text(
-                      _birthdayDate!,
-                      style: AppTypography.font12
-                          .copyWith(color: AppColors.greyC4C4C4),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 27.h, left: 16.w),
-                    child: Row(
-                      children: [
-                        Text(
-                          context.localize!.loaded,
-                          style: AppTypography.font12,
-                        ),
-                        Text(
-                          '999+',
-                          style: AppTypography.font12
-                              .copyWith(color: AppColors.greyC4C4C4),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10.h),
-                    child: Divider(height: 2.h, color: AppColors.greyC4C4C4),
-                  ),
-                  state.user.uploadImages!.isNotEmpty
-                      ? Expanded(
-                          child: GridView.builder(
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 4),
-                              itemCount: state.user.uploadImages!.length + 1,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  width: 166.w,
-                                  height: 166.h,
-                                  child: CachedNetworkImage(
-                                    imageUrl:
-                                        'http://gallery.dev.webant.ru/media/${state.user.uploadImages?[index]}',
+              if (state is ProfileLoadingState) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (state is ProfileSuccess) {
+                return Column(
+                  children: [
+                    CustomAppBar(
+                      leading: AppIcons.backArrow(),
+                      trailing: GestureDetector(
+                          onTap: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => ProfileSettingsScreen(
+                                    user: state.user,
                                   ),
-                                );
-                              }),
-                        )
-                      : Center(
-                          child: Text(context.localize!.noPhoto),
-                        ),
-                ],
-              );
-            }
-            return Container();
-          },
+                                ),
+                              ),
+                          child: AppIcons.settings()),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 21.h),
+                      child: Container(
+                          height: 100.h,
+                          width: 100.h,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border:
+                                  Border.all(color: AppColors.greyC4C4C4)),
+                          child: AppIcons.profilePhoto()),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 10.h),
+                      child: Text(
+                        state.user.username,
+                        style: AppTypography.font17,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 8.h),
+                      child: Text(
+                        state.user.birthday,
+                        style: AppTypography.font12
+                            .copyWith(color: AppColors.greyC4C4C4),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 27.h, left: 16.w),
+                      child: Row(
+                        children: [
+                          Text(
+                            context.localize!.loaded,
+                            style: AppTypography.font12,
+                          ),
+                          Text(
+                            '999+',
+                            style: AppTypography.font12
+                                .copyWith(color: AppColors.greyC4C4C4),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 10.h),
+                      child:
+                          Divider(height: 2.h, color: AppColors.greyC4C4C4),
+                    ),
+                    state.user.uploadImages!.isNotEmpty
+                        ? Expanded(
+                            child: GridView.builder(
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 4),
+                                itemCount:
+                                    state.user.uploadImages!.length + 1,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    width: 166.w,
+                                    height: 166.h,
+                                    child: CachedNetworkImage(
+                                      imageUrl:
+                                          'http://gallery.dev.webant.ru/media/${state.user.uploadImages?[index]}',
+                                    ),
+                                  );
+                                }),
+                          )
+                        : Center(
+                            child: Text(context.localize!.noPhoto),
+                          ),
+                  ],
+                );
+              }
+              return Container();
+            },
+          ),
         ),
       ),
     );

@@ -33,12 +33,15 @@ class CustomAppBar extends StatelessWidget {
                 Spacer(),
                 Padding(
                   padding: EdgeInsets.only(right: 16.0),
-                  child: SizedBox(
-                    width: 46.w,
-                    height: 44.h,
-                    child: GestureDetector(
-                      onTap: () => onTap,
-                      child: trailing,
+                  child: GestureDetector(
+                    onTap: () => onTap,
+                    child: SizedBox(
+                      width: 100.w,
+                      height: 44.h,
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: trailing,
+                      ),
                     ),
                   ),
                 ),

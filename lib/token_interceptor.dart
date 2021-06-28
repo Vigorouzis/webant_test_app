@@ -26,8 +26,13 @@ class TokenInterceptor extends Interceptor {
 
   @override
   Future onError(DioError err, ErrorInterceptorHandler handler) async {
-    if (err.response!.statusCode == 401) {
+    if ((err.response!.data['error_description'] as String)
+            .contains('The access token provided is invalid') ||
+        (err.response!.data['error_description'] as String)
+            .contains('The access token provided has expired')) {
       String? refreshToken = await preferences!.read('refresh_token');
+      refreshToken = refreshToken!.substring(1, refreshToken.length - 1);
+      print(refreshToken);
       String? clientId = await preferences!.read('client_id');
       String? clientSecret;
       String? clientRandomId;
@@ -42,7 +47,7 @@ class TokenInterceptor extends Interceptor {
       print('${err.requestOptions.path} refresh token $refreshToken ');
 
       if (refreshToken != null) {
-        return dio!.request(
+        var response = await dio!.request(
           '${ApiConstants.tokenURL}?client_id=${clientId}_$clientRandomId&grant_type=refresh_token&refresh_token=$refreshToken&client_secret=$clientSecret',
           cancelToken: err.requestOptions.cancelToken,
           data: err.requestOptions.data,
@@ -53,6 +58,10 @@ class TokenInterceptor extends Interceptor {
             HttpHeaders.authorizationHeader: 'Bearer $refreshToken'
           }, method: 'GET'),
         );
+
+        await preferences!.save('access_token', response.data['access_token']);
+        await preferences!
+            .save('refresh_token', response.data['refresh_token']);
       } else {
         return err;
       }

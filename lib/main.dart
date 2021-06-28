@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:webant_test_app/api/send_image_api/send_image_repository.dart';
 import 'package:webant_test_app/blocs/load_image_bloc/load_image_bloc.dart';
 import 'package:webant_test_app/blocs/load_popular_images_bloc/load_popular_images_bloc.dart';
 import 'package:webant_test_app/blocs/profile_bloc/profile_bloc.dart';
 import 'package:webant_test_app/api/image_api/image_repository.dart';
 import 'package:webant_test_app/api/shared_prefs.dart';
 import 'package:webant_test_app/api/user_api/user_repository.dart';
+import 'package:webant_test_app/blocs/profile_setting_bloc/profile_setting_bloc.dart';
+import 'package:webant_test_app/blocs/send_image_bloc/send_image_bloc.dart';
 import 'package:webant_test_app/locator.dart';
 import 'package:webant_test_app/screens/main_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -41,7 +44,12 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => ProfileBloc(userRepository: UserRepository()),
-          )
+          ),
+          BlocProvider(
+            create: (_) => SendImageBloc(repository: SendImageRepository()),
+          ),
+          BlocProvider(
+              create: (_) => ProfileSettingsBloc(repository: UserRepository()))
         ],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,

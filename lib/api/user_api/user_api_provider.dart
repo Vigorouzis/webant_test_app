@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:webant_test_app/locator.dart';
 import 'package:webant_test_app/models/user.dart';
@@ -15,6 +18,41 @@ class UserApiProvider {
       return User.fromJson(response.data);
     } else {
       throw Exception('Failed load user');
+    }
+  }
+
+  Future<String?> sendDataToApi({
+    String? username,
+    String? birthday,
+    String? email,
+    String? phone,
+    String? fullName,
+  }) async {
+    var clientId = await _prefs.read('client_id');
+    var accessToken = await _prefs.read('access_token');
+    accessToken = accessToken!.substring(1, accessToken.length - 1);
+    var params = {
+      'email': email,
+      'phone': phone,
+      'fullName': fullName,
+      'username': username,
+      'birthday': birthday,
+    };
+
+    var response = await _dio.put(
+      '${ApiConstants.profileURL}/$clientId',
+      data: jsonEncode(params),
+      options: Options(headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.acceptHeader: "application/json",
+        HttpHeaders.authorizationHeader: 'Bearer $accessToken',
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return 'OK';
+    } else {
+      return 'Not OK';
     }
   }
 

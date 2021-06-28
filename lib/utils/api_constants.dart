@@ -3,5 +3,6 @@ abstract class ApiConstants {
   static const tokenURL = 'http://gallery.dev.webant.ru/oauth/v2/token';
   static const imageURL = 'http://gallery.dev.webant.ru/api/photos';
   static const profileURL = 'http://gallery.dev.webant.ru/api/users';
-
+  static const mediaObjectsURL =
+      'http://gallery.dev.webant.ru/api/media_objects';
 }

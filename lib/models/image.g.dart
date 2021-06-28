@@ -8,7 +8,7 @@ part of 'image.dart';
 
 ImageModel _$ImageModelFromJson(Map<String, dynamic> json) {
   return ImageModel(
-    name: json['name'] as String?,
+    name: json['image']['name'] as String?,
     dateCreate: json['dateCreate'] as String?,
     user: json['user'] as String?,
     description: json['description'] as String?,

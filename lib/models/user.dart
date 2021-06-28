@@ -2,10 +2,10 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'user.g.dart';
 
-@JsonSerializable()
+  @JsonSerializable()
 class User {
   final String name;
-  final String birthday;
+   String birthday;
   final String? email;
   final String? phone;
   final String? password;

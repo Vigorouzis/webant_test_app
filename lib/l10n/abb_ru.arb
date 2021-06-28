@@ -29,5 +29,8 @@
   "loaded": "Загружено: ",
   "noPhoto": "Нет фото",
   "notAllFieldsAreFilled": "Не все поля заполнены",
-  "noProfileData": "Нет данных профиля"
+  "noProfileData": "Нет данных профиля",
+  "save": "Сохранить",
+  "name": "Имя",
+  "description": "Описание"
 }
