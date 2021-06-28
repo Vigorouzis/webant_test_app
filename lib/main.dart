@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:webant_test_app/api/send_image_api/send_image_repository.dart';
-import 'package:webant_test_app/blocs/load_image_bloc/load_image_bloc.dart';
-import 'package:webant_test_app/blocs/load_popular_images_bloc/load_popular_images_bloc.dart';
-import 'package:webant_test_app/blocs/profile_bloc/profile_bloc.dart';
-import 'package:webant_test_app/api/image_api/image_repository.dart';
-import 'package:webant_test_app/api/shared_prefs.dart';
-import 'package:webant_test_app/api/user_api/user_repository.dart';
-import 'package:webant_test_app/blocs/profile_setting_bloc/profile_setting_bloc.dart';
-import 'package:webant_test_app/blocs/send_image_bloc/send_image_bloc.dart';
+import 'package:webant_test_app/data/datasources/shared_prefs.dart';
+import 'package:webant_test_app/data/repositories/image_repository_impl.dart';
+import 'package:webant_test_app/data/repositories/send_image_repository_impl.dart';
+import 'package:webant_test_app/data/repositories/user_repository_impl.dart';
+import 'package:webant_test_app/presentation/blocs/load_image_bloc/load_image_bloc.dart';
+import 'package:webant_test_app/presentation/blocs/load_popular_images_bloc/load_popular_images_bloc.dart';
+import 'package:webant_test_app/presentation/blocs/profile_bloc/profile_bloc.dart';
+import 'package:webant_test_app/presentation/blocs/profile_setting_bloc/profile_setting_bloc.dart';
+import 'package:webant_test_app/presentation/blocs/send_image_bloc/send_image_bloc.dart';
 import 'package:webant_test_app/locator.dart';
-import 'package:webant_test_app/screens/main_screen.dart';
+import 'package:webant_test_app/presentation/screens/main_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:webant_test_app/screens/welcome_screen.dart';
+import 'package:webant_test_app/presentation/screens/welcome_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,20 +36,22 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (context) =>
-                LoadImageBloc(imageRepository: ImageRepository()),
+                LoadImageBloc(imageRepository: ImageRepositoryImpl()),
           ),
           BlocProvider(
             create: (context) =>
-                LoadPopularImageBloc(imageRepository: ImageRepository()),
+                LoadPopularImageBloc(imageRepository: ImageRepositoryImpl()),
           ),
           BlocProvider(
-            create: (context) => ProfileBloc(userRepository: UserRepository()),
+            create: (context) =>
+                ProfileBloc(userRepository: UserRepositoryImpl()),
           ),
           BlocProvider(
-            create: (_) => SendImageBloc(repository: SendImageRepository()),
+            create: (_) => SendImageBloc(repository: SendImageRepositoryImpl()),
           ),
           BlocProvider(
-              create: (_) => ProfileSettingsBloc(repository: UserRepository()))
+              create: (_) =>
+                  ProfileSettingsBloc(repository: UserRepositoryImpl()))
         ],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,

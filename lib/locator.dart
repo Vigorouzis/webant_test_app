@@ -1,10 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:webant_test_app/api/auth_api/auth_api_provider.dart';
-import 'package:webant_test_app/api/image_api/image_api_provider.dart';
-import 'package:webant_test_app/api/shared_prefs.dart';
-import 'package:webant_test_app/api/user_api/user_api_provider.dart';
+
+import 'package:webant_test_app/data/datasources/auth_api_provider.dart';
+import 'package:webant_test_app/data/datasources/image_api_provider.dart';
+import 'package:webant_test_app/data/datasources/send_image_api.dart';
+import 'package:webant_test_app/data/datasources/shared_prefs.dart';
+import 'package:webant_test_app/data/datasources/user_api_provider.dart';
+
 import 'package:webant_test_app/token_interceptor.dart';
 
 final locator = GetIt.I;
@@ -29,4 +32,5 @@ Future<void> setDI() async {
   locator.registerLazySingleton<AuthApiProvider>(() => AuthApiProvider());
   locator.registerLazySingleton<ImageApiProvider>(() => ImageApiProvider());
   locator.registerLazySingleton<UserApiProvider>(() => UserApiProvider());
+  locator.registerLazySingleton<SendImageApiProvider>(() => SendImageApiProvider());
 }
