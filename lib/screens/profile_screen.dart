@@ -17,7 +17,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  String? _birthdayDate = '';
 
   @override
   void initState() {

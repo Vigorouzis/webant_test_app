@@ -43,7 +43,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Данные изменены'),
+                  content: Text(context.localize!.dataChanged),
                 ),
               );
             }

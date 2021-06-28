@@ -32,5 +32,6 @@
   "noProfileData": "No profile data",
   "save": "Save",
   "name": "Name",
-  "description": "Description"
+  "description": "Description",
+  "dataChanged": "Data changed"
 }

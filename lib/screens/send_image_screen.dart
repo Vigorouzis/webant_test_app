@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:webant_test_app/api/send_image_api/send_image_api.dart';
 import 'package:webant_test_app/blocs/send_image_bloc/send_image_bloc.dart';
 import 'package:webant_test_app/blocs/send_image_bloc/send_image_event.dart';
 import 'package:webant_test_app/blocs/send_image_bloc/send_image_state.dart';
@@ -24,7 +23,7 @@ class _SendImageScreenState extends State<SendImageScreen> {
   File? _image;
   TextEditingController? _nameController;
   TextEditingController? _descriptionController;
-  SendImageApi _api = SendImageApi();
+
 
   @override
   void initState() {

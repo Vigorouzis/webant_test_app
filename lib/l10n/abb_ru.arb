@@ -32,5 +32,6 @@
   "noProfileData": "Нет данных профиля",
   "save": "Сохранить",
   "name": "Имя",
-  "description": "Описание"
+  "description": "Описание",
+  "dataChanged": "Данные изменены"
 }
