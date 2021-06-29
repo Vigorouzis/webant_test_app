@@ -16,6 +16,9 @@ class LoadPopularImage extends LoadPopularImageEvent {
   });
 }
 
-class GetPopularData extends LoadPopularImageEvent {
-  const GetPopularData();
+class SearchInPopularImageList extends LoadPopularImageEvent {
+  final String searchText;
+
+  const SearchInPopularImageList({required this.searchText});
 }
+

@@ -11,5 +11,7 @@ abstract class ImageRepository {
 
   Future<int?>? getPopularCountOfPages();
 
+  List<ImageModel?>? getPopularImageList();
+
   List<ImageModel?>? getNewImageList();
 }
