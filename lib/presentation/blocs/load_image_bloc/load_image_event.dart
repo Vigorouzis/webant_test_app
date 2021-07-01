@@ -12,6 +12,8 @@ class LoadNewImage extends LoadImageEvent {
       {this.page, this.limit, this.isRefresh, this.isTabChanged});
 }
 
-class GetData extends LoadImageEvent {
-  const GetData();
+class SearchInNewImageList extends LoadImageEvent {
+  final String searchText;
+
+  const SearchInNewImageList({required this.searchText});
 }

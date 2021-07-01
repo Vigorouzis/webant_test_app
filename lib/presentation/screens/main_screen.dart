@@ -9,7 +9,6 @@ import 'package:webant_test_app/presentation/blocs/load_image_bloc/load_image_st
 import 'package:webant_test_app/presentation/blocs/load_popular_images_bloc/load_popular_images_bloc.dart';
 import 'package:webant_test_app/presentation/blocs/load_popular_images_bloc/load_popular_images_event.dart';
 import 'package:webant_test_app/presentation/blocs/load_popular_images_bloc/load_popular_images_state.dart';
-import 'package:webant_test_app/domain/repositories/image_repository.dart';
 import 'package:webant_test_app/presentation/screens/detail_image_screen.dart';
 import 'package:webant_test_app/presentation/screens/profile_screen.dart';
 import 'package:webant_test_app/presentation/screens/send_image_screen.dart';
@@ -26,35 +25,28 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
-  TextEditingController? _searchController;
+  TextEditingController? _search1Controller;
+  TextEditingController? _search2Controller;
   int _currentIndex = 0;
 
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
     _tabController?.addListener(_handleTabSelection);
-    _searchController = TextEditingController();
+    _search1Controller = TextEditingController();
+    _search2Controller = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
     _tabController?.dispose();
-    _searchController?.dispose();
+    _search1Controller?.dispose();
+    _search2Controller?.dispose();
     super.dispose();
   }
 
   void _handleTabSelection() {
-    if (_tabController!.indexIsChanging) {
-      switch (_tabController!.index) {
-        case 0:
-          context.read<LoadImageBloc>().add(GetData());
-          break;
-        case 1:
-          context.read<LoadPopularImageBloc>().add(GetPopularData());
-          break;
-      }
-    }
     setState(() {});
   }
 
@@ -69,7 +61,8 @@ class _MainScreenState extends State<MainScreen>
     final List<Widget> _children = [
       LoadImageItemScreen(
         tabController: _tabController,
-        searchController: _searchController,
+        searchController: _search1Controller,
+        search2Controller: _search2Controller,
       ),
       SendImageScreen(
         onTabTapped: onTabTapped,
@@ -108,14 +101,17 @@ class _MainScreenState extends State<MainScreen>
 
 class LoadImageItemScreen extends StatefulWidget {
   final TabController? _tabController;
-  final TextEditingController? _searchController;
+  final TextEditingController? _search1Controller;
+  final TextEditingController? _search2Controller;
 
   LoadImageItemScreen(
       {Key? key,
       TabController? tabController,
-      TextEditingController? searchController})
+      TextEditingController? searchController,
+      TextEditingController? search2Controller})
       : _tabController = tabController,
-        _searchController = searchController,
+        _search1Controller = searchController,
+        _search2Controller = search2Controller,
         super(key: key);
 
   @override
@@ -133,7 +129,13 @@ class _LoadImageItemScreenState extends State<LoadImageItemScreen> {
             width: 343.w,
             height: 36.h,
             child: TextField(
-              controller: widget._searchController,
+              controller: (() {
+                if (widget._tabController!.index == 0) {
+                  return widget._search1Controller;
+                } else {
+                  return widget._search2Controller;
+                }
+              }()),
               decoration: InputDecoration(
                 fillColor: AppColors.grey8E8E93.withOpacity(0.12),
                 filled: true,
@@ -205,8 +207,12 @@ class _LoadImageItemScreenState extends State<LoadImageItemScreen> {
         Expanded(
           child: Container(
             child: TabBarView(controller: widget._tabController!, children: [
-              NewImagesTab(),
-              PopularImagesTab(),
+              NewImagesTab(
+                searchController: widget._search1Controller,
+              ),
+              PopularImagesTab(
+                searchController: widget._search2Controller,
+              ),
             ]),
           ),
         )
@@ -216,9 +222,11 @@ class _LoadImageItemScreenState extends State<LoadImageItemScreen> {
 }
 
 class NewImagesTab extends StatefulWidget {
-  NewImagesTab({
-    Key? key,
-  }) : super(key: key);
+  final TextEditingController? _searchController;
+
+  NewImagesTab({Key? key, TextEditingController? searchController})
+      : _searchController = searchController,
+        super(key: key);
 
   @override
   _NewImagesTabState createState() => _NewImagesTabState();
@@ -242,6 +250,12 @@ class _NewImagesTabState extends State<NewImagesTab>
     context.read<LoadImageBloc>().add(LoadNewImage(limit: 10, page: _page));
     _controller = ScrollController();
     _repository = ImageRepositoryImpl();
+    widget._searchController!.addListener(() {
+      if (widget._searchController!.text.isNotEmpty) {
+        context.read<LoadImageBloc>().add(
+            SearchInNewImageList(searchText: widget._searchController!.text));
+      }
+    });
     getCountOfPages();
     _controller?.addListener(() {
       if (_controller?.position.pixels ==
@@ -366,7 +380,11 @@ class _NewImagesTabState extends State<NewImagesTab>
 }
 
 class PopularImagesTab extends StatefulWidget {
-  PopularImagesTab({Key? key}) : super(key: key);
+  TextEditingController? _searchController;
+
+  PopularImagesTab({Key? key, TextEditingController? searchController})
+      : _searchController = searchController,
+        super(key: key);
 
   @override
   _PopularImagesTabState createState() => _PopularImagesTabState();
@@ -391,6 +409,12 @@ class _PopularImagesTabState extends State<PopularImagesTab>
         .add(LoadPopularImage(limit: 10, page: _page, isRefresh: false));
     _controller = ScrollController();
     _repository = ImageRepositoryImpl();
+    widget._searchController!.addListener(() {
+      if (widget._searchController!.text.isNotEmpty) {
+        context.read<LoadPopularImageBloc>().add(SearchInPopularImageList(
+            searchText: widget._searchController!.text));
+      }
+    });
     getCountOfPages();
     _controller?.addListener(() {
       if (_controller?.position.pixels ==

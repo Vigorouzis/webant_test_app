@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webant_test_app/data/models/image.dart';
 import 'package:webant_test_app/data/repositories/image_repository_impl.dart';
 import 'package:webant_test_app/presentation/blocs/load_image_bloc/load_image_event.dart';
 import 'package:webant_test_app/presentation/blocs/load_image_bloc/load_image_state.dart';
@@ -30,9 +31,25 @@ class LoadImageBloc extends Bloc<LoadImageEvent, LoadImageState> {
         yield LoadImageFailed();
       }
     }
-    if (event is GetData) {
-      var response = _imageRepository!.getNewImageList();
-      yield LoadImageSuccess(newImageList: response);
+    if (event is SearchInNewImageList) {
+      List<ImageModel?> searchNewImageList = [];
+
+      List<ImageModel?> result = [];
+      try {
+        result = _imageRepository!.getNewImageList()!;
+      } catch (_) {
+        throw Exception('failed');
+      }
+      result.forEach((element) {
+        if (element!.name!.contains(event.searchText)) {
+          searchNewImageList.add(element);
+        }
+      });
+      if (searchNewImageList.isNotEmpty) {
+        yield LoadImageSuccess(newImageList: searchNewImageList);
+      } else {
+        yield LoadImageFailed();
+      }
     }
   }
 }

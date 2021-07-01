@@ -19,6 +19,10 @@ class ImageRepositoryImpl implements ImageRepository {
   List<ImageModel?>? getNewImageList() => _apiProvider.getNewImageList();
 
   @override
+  List<ImageModel?>? getPopularImageList() =>
+      _apiProvider.getPopularImageList();
+
+  @override
   Future<int?>? getPopularCountOfPages() =>
       _apiProvider.getPopularCountOfPages();
 
