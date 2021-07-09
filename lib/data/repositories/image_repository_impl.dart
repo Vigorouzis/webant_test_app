@@ -2,10 +2,10 @@ import 'package:webant_test_app/data/datasources/image_api_provider.dart';
 import 'package:webant_test_app/data/models/image.dart';
 
 import 'package:webant_test_app/domain/repositories/image_repository.dart';
-import 'package:webant_test_app/locator.dart';
+import 'package:webant_test_app/injection.dart';
 
 class ImageRepositoryImpl implements ImageRepository {
-  ImageApiProvider _apiProvider = locator<ImageApiProvider>();
+  ImageApiProvider _apiProvider = injection<ImageApiProvider>();
 
   @override
   Future<int?>? getNewCountOfPages() => _apiProvider.getNewCountOfPages();

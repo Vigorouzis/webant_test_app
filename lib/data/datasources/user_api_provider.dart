@@ -3,14 +3,14 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:webant_test_app/data/datasources/shared_prefs.dart';
-import 'package:webant_test_app/locator.dart';
+import 'package:webant_test_app/injection.dart';
 import 'package:webant_test_app/data/models/user.dart';
 
 import 'package:webant_test_app/utils/api_constants.dart';
 
 class UserApiProvider {
-  var _dio = locator.get<Dio>();
-  var _prefs = locator.get<SharedPrefs>();
+  var _dio = injection.get<Dio>();
+  var _prefs = injection.get<SharedPrefs>();
 
   Future<User?> getProfileInfo() async {
     var clientId = await _prefs.read('client_id');
@@ -22,7 +22,7 @@ class UserApiProvider {
     }
   }
 
-  Future<String?> sendDataToApi({
+  Future<User?> sendDataToApi({
     String? username,
     String? birthday,
     String? email,
@@ -51,9 +51,9 @@ class UserApiProvider {
     );
 
     if (response.statusCode == 200) {
-      return 'OK';
+      return User.fromJson(response.data);
     } else {
-      return 'Not OK';
+      return null;
     }
   }
 

@@ -8,9 +8,10 @@ import 'package:webant_test_app/presentation/blocs/send_image_bloc/send_image_ev
 import 'package:webant_test_app/presentation/blocs/send_image_bloc/send_image_state.dart';
 import 'package:webant_test_app/utils/utils.dart';
 import 'package:webant_test_app/presentation/widgets/widgets.dart';
+
 class SendImageScreen extends StatefulWidget {
   int? index;
-  Function(int)? onTabTapped;
+  final Function(int)? onTabTapped;
 
   SendImageScreen({Key? key, this.index, this.onTabTapped}) : super(key: key);
 
@@ -22,7 +23,6 @@ class _SendImageScreenState extends State<SendImageScreen> {
   File? _image;
   TextEditingController? _nameController;
   TextEditingController? _descriptionController;
-
 
   @override
   void initState() {
@@ -67,6 +67,7 @@ class _SendImageScreenState extends State<SendImageScreen> {
           builder: (context, state) => Column(
             children: [
               CustomAppBar(
+                popFunc: widget.onTabTapped,
                 leading: AppIcons.backArrow(),
                 trailing: GestureDetector(
                   onTap: () {

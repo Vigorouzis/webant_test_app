@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:webant_test_app/data/datasources/send_image_api.dart';
 import 'package:webant_test_app/domain/repositories/send_image_repository.dart';
-import 'package:webant_test_app/locator.dart';
+import 'package:webant_test_app/injection.dart';
 
 class SendImageRepositoryImpl implements SendImageRepository {
-  SendImageApiProvider _imageApi = locator<SendImageApiProvider>();
+  SendImageApiProvider _imageApi = injection<SendImageApiProvider>();
 
   @override
   Future<String?> sendImageToApi(

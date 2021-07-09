@@ -3,7 +3,7 @@ import 'package:webant_test_app/data/models/user.dart';
 abstract class UserRepository {
   Future<User?> getProfileInfo();
 
-  Future<String?> sendDataToApi({
+  Future<User?> sendDataToApi({
     String? username,
     String? birthday,
     String? email,

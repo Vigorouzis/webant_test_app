@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:webant_test_app/presentation/blocs/registration_bloc/registration_bloc.dart';
 import 'package:webant_test_app/presentation/blocs/registration_bloc/registration_event.dart';
 import 'package:webant_test_app/presentation/blocs/registration_bloc/registration_state.dart';
@@ -10,7 +11,7 @@ import 'package:webant_test_app/utils/utils.dart';
 import 'package:webant_test_app/presentation/widgets/widgets.dart';
 
 class SingUpScreen extends StatefulWidget {
-  SingUpScreen({Key? key}) : super(key: key);
+  SingUpScreen({GlobalKey? key}) : super(key: key);
 
   @override
   _SingUpScreenState createState() => _SingUpScreenState();
@@ -27,6 +28,11 @@ class _SingUpScreenState extends State<SingUpScreen> {
   bool _passwordObscureText = true;
   bool _confirmPasswordObscureText = true;
 
+  MaskTextInputFormatter? phoneFormatter;
+  MaskTextInputFormatter? birthdayFormatter;
+
+  // MaskTextInputFormatter? phoneFormatter;
+
   @override
   void initState() {
     _nameController = TextEditingController();
@@ -36,6 +42,9 @@ class _SingUpScreenState extends State<SingUpScreen> {
     _confirmPasswordController = TextEditingController();
     _usernameController = TextEditingController();
     _phoneController = TextEditingController();
+    phoneFormatter = MaskTextInputFormatter(
+        mask: '+###########', filter: {"#": RegExp(r'[0-9]')});
+    birthdayFormatter = MaskTextInputFormatter(mask: '##.##.####');
     super.initState();
   }
 
@@ -51,8 +60,19 @@ class _SingUpScreenState extends State<SingUpScreen> {
     super.dispose();
   }
 
+  Size _textSize(String text, TextStyle style) {
+    final TextPainter textPainter = TextPainter(
+        text: TextSpan(text: text, style: style),
+        maxLines: 1,
+        textDirection: TextDirection.ltr)
+      ..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.size;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final Size txtSize = _textSize(context.localize!.signUp,
+        AppTypography.font30.copyWith(fontWeight: FontWeight.w700));
     return Scaffold(
       body: SafeArea(
         child: BlocProvider(
@@ -90,7 +110,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                                         .copyWith(fontWeight: FontWeight.w700),
                                   ),
                                   Container(
-                                    width: 94.w,
+                                    width: txtSize.width,
                                     height: 2.h,
                                     color: AppColors.pinkCF497E,
                                   )
@@ -119,6 +139,10 @@ class _SingUpScreenState extends State<SingUpScreen> {
                             padding: EdgeInsets.only(
                                 left: 16.w, right: 16.w, top: 29.h),
                             trailing: Icon(Icons.phone),
+                            // isError: isPhoneNumber(_phoneController!.text),
+                            errorText: 'Не корректный номер',
+                            formatter: phoneFormatter,
+                            // error: isPhoneNumber,
                           ),
                           CustomTextField(
                             controller: _birthdayController,
@@ -126,6 +150,10 @@ class _SingUpScreenState extends State<SingUpScreen> {
                             padding: EdgeInsets.only(
                                 left: 16.w, right: 16.w, top: 29.h),
                             trailing: AppIcons.calendar(),
+                            //  isError: isBirthday(_birthdayController!.text),
+                            errorText: 'Не корректный день рождения',
+                            formatter: birthdayFormatter,
+                            //  error: isBirthday,
                           ),
                           CustomTextField(
                             controller: _emailController,
@@ -133,6 +161,9 @@ class _SingUpScreenState extends State<SingUpScreen> {
                             padding: EdgeInsets.only(
                                 left: 16.w, right: 16.w, top: 29.h),
                             trailing: AppIcons.email(),
+                            // isError: isEmail(_emailController!.text),
+                            errorText: 'Не корректный email',
+                            // error: isEmail,
                           ),
                           CustomTextField(
                             obscureText: _passwordObscureText,

@@ -67,12 +67,17 @@ class _MainScreenState extends State<MainScreen>
       SendImageScreen(
         onTabTapped: onTabTapped,
       ),
-      ProfileScreen(),
+      ProfileScreen(
+        onTabTapped: onTabTapped,
+      ),
     ];
 
     return Scaffold(
       body: SafeArea(
-        child: _children[_currentIndex],
+        child: IndexedStack(
+          index: _currentIndex,
+          children: _children,
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
@@ -173,9 +178,11 @@ class _LoadImageItemScreenState extends State<LoadImageItemScreen> {
                   child: Center(
                     child: Text(
                       context.localize!.newImages,
-                      style: AppTypography.font17.copyWith(
-                        color: AppColors.greyC4C4C4,
-                      ),
+                      style: widget._tabController?.index == 0
+                          ? AppTypography.font17.copyWith(color: Colors.black)
+                          : AppTypography.font17.copyWith(
+                              color: AppColors.greyC4C4C4,
+                            ),
                     ),
                   ),
                 ),
@@ -194,7 +201,9 @@ class _LoadImageItemScreenState extends State<LoadImageItemScreen> {
                   child: Center(
                     child: Text(
                       context.localize!.popular,
-                      style: AppTypography.font17.copyWith(
+                      style: widget._tabController?.index == 1
+                          ? AppTypography.font17.copyWith(color: Colors.black)
+                          : AppTypography.font17.copyWith(
                         color: AppColors.greyC4C4C4,
                       ),
                     ),
@@ -241,9 +250,9 @@ class _NewImagesTabState extends State<NewImagesTab>
 
   ImageRepositoryImpl? _repository;
 
-  void getCountOfPages() async {
-    _countOfPages = (await _repository?.getNewCountOfPages())!;
-  }
+  // Future<void> getCountOfPages() async {
+  //   _countOfPages = (await _repository?.getNewCountOfPages())!;
+  // }
 
   @override
   void initState() {
@@ -256,7 +265,7 @@ class _NewImagesTabState extends State<NewImagesTab>
             SearchInNewImageList(searchText: widget._searchController!.text));
       }
     });
-    getCountOfPages();
+    //getCountOfPages();
     _controller?.addListener(() {
       if (_controller?.position.pixels ==
           _controller?.position.maxScrollExtent) {
@@ -276,43 +285,45 @@ class _NewImagesTabState extends State<NewImagesTab>
     return BlocBuilder<LoadImageBloc, LoadImageState>(
       builder: (context, state) {
         if (state is LoadImageFailed) {
-          return Center(
-            child: RefreshIndicator(
-              onRefresh: () async {
-                _page = 1;
-                context
-                    .read<LoadImageBloc>()
-                    .add(LoadNewImage(limit: 10, page: _page, isRefresh: true));
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset('assets/icons/webant_logo_error.png'),
-                  Padding(
-                    padding: EdgeInsets.only(top: 8.h),
-                    child: Text(
-                      context.localize!.sorry,
-                      style: AppTypography.font17
-                          .copyWith(color: AppColors.greyC4C4C4),
-                    ),
+          return RefreshIndicator(
+            onRefresh: () async {
+              _page = 1;
+              context
+                  .read<LoadImageBloc>()
+                  .add(LoadNewImage(limit: 10, page: _page, isRefresh: true));
+            },
+            child: ListView(
+              children: [
+                Container(
+                  height: 220.h,
+                  child: Text(''),
+                ),
+                AppIcons.webantErrorLogo(),
+                Padding(
+                  padding: EdgeInsets.only(top: 8.h),
+                  child: Text(
+                    context.localize!.sorry,
+                    style: AppTypography.font17
+                        .copyWith(color: AppColors.greyC4C4C4),
+                    textAlign: TextAlign.center,
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 8.h),
-                    child: Text(
-                      context.localize!.thereIsNoPictures,
-                      style: AppTypography.font12
-                          .copyWith(color: AppColors.greyC4C4C4),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Text(
-                    context.localize!.pleaseComeBackLater,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 8.h),
+                  child: Text(
+                    context.localize!.thereIsNoPictures,
                     style: AppTypography.font12
                         .copyWith(color: AppColors.greyC4C4C4),
                     textAlign: TextAlign.center,
                   ),
-                ],
-              ),
+                ),
+                Text(
+                  context.localize!.pleaseComeBackLater,
+                  style: AppTypography.font12
+                      .copyWith(color: AppColors.greyC4C4C4),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
           );
         }
@@ -351,16 +362,18 @@ class _NewImagesTabState extends State<NewImagesTab>
                           ),
                         ),
                         child: CachedNetworkImage(
+                          placeholder: (context, url) => Center(
+                            child: CircularProgressIndicator(),
+                          ),
                           imageUrl:
                               'http://gallery.dev.webant.ru/media/${state.newImageList?[index]!.name}',
-                          fit: BoxFit.cover,
                           imageBuilder: (context, imageProvider) => Container(
                             width: 166.w,
                             height: 166.h,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               image: DecorationImage(
-                                  image: imageProvider, fit: BoxFit.fill),
+                                  image: imageProvider, fit: BoxFit.cover),
                             ),
                           ),
                         ),
@@ -435,34 +448,45 @@ class _PopularImagesTabState extends State<PopularImagesTab>
     return BlocBuilder<LoadPopularImageBloc, LoadPopularImageState>(
       builder: (context, state) {
         if (state is LoadPopularImageFailed) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset('assets/icons/webant_logo_error.png'),
-              Padding(
-                padding: EdgeInsets.only(top: 8.h),
-                child: Text(
-                  context.localize!.sorry,
-                  style: AppTypography.font17
-                      .copyWith(color: AppColors.greyC4C4C4),
+          return RefreshIndicator(
+            onRefresh: () async {
+              _page = 1;
+              context.read<LoadPopularImageBloc>().add(
+                  LoadPopularImage(limit: 10, page: _page, isRefresh: true));
+            },
+            child: ListView(
+              children: [
+                Container(
+                  height: 220.h,
+                  child: Text(''),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 8.h),
-                child: Text(
-                  context.localize!.thereIsNoPictures,
+                AppIcons.webantErrorLogo(),
+                Padding(
+                  padding: EdgeInsets.only(top: 8.h),
+                  child: Text(
+                    context.localize!.sorry,
+                    style: AppTypography.font17
+                        .copyWith(color: AppColors.greyC4C4C4),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 8.h),
+                  child: Text(
+                    context.localize!.thereIsNoPictures,
+                    style: AppTypography.font12
+                        .copyWith(color: AppColors.greyC4C4C4),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Text(
+                  context.localize!.pleaseComeBackLater,
                   style: AppTypography.font12
                       .copyWith(color: AppColors.greyC4C4C4),
                   textAlign: TextAlign.center,
                 ),
-              ),
-              Text(
-                context.localize!.pleaseComeBackLater,
-                style:
-                    AppTypography.font12.copyWith(color: AppColors.greyC4C4C4),
-                textAlign: TextAlign.center,
-              ),
-            ],
+              ],
+            ),
           );
         }
 
@@ -500,6 +524,9 @@ class _PopularImagesTabState extends State<PopularImagesTab>
                           ),
                         ),
                         child: CachedNetworkImage(
+                          placeholder: (context, url) => Center(
+                            child: CircularProgressIndicator(),
+                          ),
                           imageUrl:
                               'http://gallery.dev.webant.ru/media/${state.popularImageFileNameList?[index]!.name}',
                           imageBuilder: (context, imageProvider) => Container(

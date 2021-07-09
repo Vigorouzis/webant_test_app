@@ -1,9 +1,9 @@
 import 'package:webant_test_app/data/datasources/auth_api_provider.dart';
 import 'package:webant_test_app/domain/repositories/auth_repository.dart';
-import 'package:webant_test_app/locator.dart';
+import 'package:webant_test_app/injection.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
-  var _authApiProvider = locator<AuthApiProvider>();
+  var _authApiProvider = injection<AuthApiProvider>();
 
   @override
   Future<String> registrationNewUser({

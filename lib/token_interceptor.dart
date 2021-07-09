@@ -16,9 +16,13 @@ class TokenInterceptor extends Interceptor {
   // Future onRequest(
   //     RequestOptions options, RequestInterceptorHandler handler) async {
   //   var tokensEntity = await preferences!.read('access_token');
+  //   print('REQUEST[${options.method}] => PATH: ${options.path}');
+  //
   //   if (tokensEntity.isNotEmpty) {
+  //     options.path =
+  //         '${ApiConstants.imageURL}?new=true&popular=false&&limit=10';
   //     options.headers = {
-  //       HttpHeaders.authorizationHeader: 'Bearer ${tokensEntity.accessToken}'
+  //       HttpHeaders.authorizationHeader: 'Bearer $tokensEntity'
   //     };
   //   }
   //
@@ -27,13 +31,10 @@ class TokenInterceptor extends Interceptor {
 
   @override
   Future onError(DioError err, ErrorInterceptorHandler handler) async {
-    if ((err.response!.data['error_description'] as String)
-            .contains('The access token provided is invalid') ||
-        (err.response!.data['error_description'] as String)
-            .contains('The access token provided has expired')) {
-      String? refreshToken = await preferences!.read('refresh_token');
-      refreshToken = refreshToken!.substring(1, refreshToken.length - 1);
-      print(refreshToken);
+    if (err.response!.statusCode == 401) {
+      String? refreshToken = await preferences?.read('refresh_token');
+      refreshToken = refreshToken?.substring(1, refreshToken.length - 1);
+      // print(refreshToken);
       String? clientId = await preferences!.read('client_id');
       String? clientSecret;
       String? clientRandomId;

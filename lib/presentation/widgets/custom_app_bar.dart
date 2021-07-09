@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:webant_test_app/utils/utils.dart';
 
 class CustomAppBar extends StatelessWidget {
   final Widget? leading;
   final Widget? trailing;
   final VoidCallback? onTap;
+  final Function(int)? popFunc;
 
-  const CustomAppBar({Key? key, this.leading, this.trailing, this.onTap})
+  const CustomAppBar(
+      {Key? key, this.leading, this.trailing, this.onTap, this.popFunc})
       : super(key: key);
 
   @override
@@ -22,11 +25,14 @@ class CustomAppBar extends StatelessWidget {
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: GestureDetector(
-                    onTap: () => Navigator.of(context).pop(),
-                    child: SizedBox(
+                    onTap: () => popFunc!(0),
+                    child: Container(
+                      color: Colors.white10,
                       width: 60.w,
                       height: 44.h,
-                      child: leading,
+                      child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: leading),
                     ),
                   ),
                 ),

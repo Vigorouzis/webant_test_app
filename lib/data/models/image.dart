@@ -1,13 +1,19 @@
+import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:webant_test_app/domain/entities/image_entity.dart';
 
 part 'image.g.dart';
 
 @JsonSerializable()
+@HiveType(typeId: 1)
 class ImageModel extends ImageEntity {
+  @HiveField(0)
   String? name;
+  @HiveField(1)
   String? dateCreate;
+  @HiveField(2)
   String? user;
+  @HiveField(3)
   String? description;
 
   ImageModel(

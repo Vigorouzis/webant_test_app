@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:webant_test_app/utils/utils.dart';
 
 class CustomTextField extends StatefulWidget {
@@ -10,18 +11,26 @@ class CustomTextField extends StatefulWidget {
   final bool obscureText;
   final int? maxLines;
   final double? height;
+  final String? errorText;
+  bool? isError;
+  final Function(String text)? error;
+  final TextInputFormatter? formatter;
 
-  CustomTextField({
-    Key? key,
-    required this.controller,
-    required this.hintText,
-    required this.padding,
-    this.trailing,
-    this.suffixText,
-    this.obscureText = false,
-    this.maxLines,
-    this.height,
-  }) : super(key: key);
+  CustomTextField(
+      {Key? key,
+      required this.controller,
+      required this.hintText,
+      required this.padding,
+      this.trailing,
+      this.suffixText,
+      this.obscureText = false,
+      this.maxLines,
+      this.height,
+      this.errorText,
+      this.isError = false,
+      this.error,
+      this.formatter})
+      : super(key: key);
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -34,13 +43,24 @@ class _CustomTextFieldState extends State<CustomTextField> {
       padding: widget.padding,
       child: Container(
         width: 343.w,
-        height: widget.height ?? 36.h,
+        // height: widget.height ?? 36.h,
         child: TextField(
+          inputFormatters:
+              widget.formatter != null ? [widget.formatter!] : null,
           maxLines: widget.maxLines ?? 1,
           obscureText: widget.obscureText,
           controller: widget.controller,
+          onChanged: (value) {
+            if (widget.error != null) {
+              setState(() {
+                widget.isError = widget.error!(value);
+              });
+              print(widget.isError);
+            }
+          },
           decoration: InputDecoration(
             hintText: widget.hintText,
+            errorText: widget.isError! == false ? widget.errorText : null,
             suffixText: widget.suffixText,
             suffixStyle: TextStyle(
               color: Colors.red,
@@ -57,6 +77,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
               borderSide: BorderSide(color: AppColors.greyC4C4C4, width: 1),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide: BorderSide(color: AppColors.pinkCF497E, width: 1),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide: BorderSide(color: AppColors.pinkCF497E, width: 1),
             ),
           ),
         ),

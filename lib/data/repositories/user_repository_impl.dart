@@ -1,16 +1,16 @@
 import 'package:webant_test_app/data/datasources/user_api_provider.dart';
 import 'package:webant_test_app/data/models/user.dart';
 import 'package:webant_test_app/domain/repositories/user_repository.dart';
-import 'package:webant_test_app/locator.dart';
+import 'package:webant_test_app/injection.dart';
 
 class UserRepositoryImpl implements UserRepository {
-  UserApiProvider _apiProvider = locator<UserApiProvider>();
+  UserApiProvider _apiProvider = injection<UserApiProvider>();
 
   @override
   Future<User?> getProfileInfo() => _apiProvider.getProfileInfo();
 
   @override
-  Future<String?> sendDataToApi({
+  Future<User?> sendDataToApi({
     String? username,
     String? birthday,
     String? email,

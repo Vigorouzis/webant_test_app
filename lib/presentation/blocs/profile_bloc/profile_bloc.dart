@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webant_test_app/data/repositories/user_repository_impl.dart';
 import 'package:webant_test_app/presentation/blocs/profile_bloc/profile_event.dart';
 import 'package:webant_test_app/presentation/blocs/profile_bloc/profile_state.dart';
-import 'package:webant_test_app/domain/repositories/user_repository.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc({UserRepositoryImpl? userRepository})

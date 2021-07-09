@@ -1,11 +1,11 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
-import 'package:webant_test_app/locator.dart';
+import 'package:webant_test_app/injection.dart';
 import 'package:webant_test_app/data/models/image.dart';
 import 'package:webant_test_app/utils/api_constants.dart';
 
 class ImageApiProvider {
-  var _dio = locator.get<Dio>();
+  var _dio = injection.get<Dio>();
   List<ImageModel?>? _newImages = [];
   List<ImageModel?>? _popularImages = [];
 

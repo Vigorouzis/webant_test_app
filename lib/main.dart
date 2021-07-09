@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:webant_test_app/data/datasources/shared_prefs.dart';
+import 'package:webant_test_app/data/models/image.dart';
+import 'package:webant_test_app/data/models/user.dart';
+
 import 'package:webant_test_app/data/repositories/image_repository_impl.dart';
 import 'package:webant_test_app/data/repositories/send_image_repository_impl.dart';
 import 'package:webant_test_app/data/repositories/user_repository_impl.dart';
+import 'package:webant_test_app/presentation/blocs/home_page_bloc/home_page_bloc.dart';
+import 'package:webant_test_app/presentation/blocs/home_page_bloc/home_page_event.dart';
+import 'package:webant_test_app/presentation/blocs/home_page_bloc/home_page_state.dart';
 import 'package:webant_test_app/presentation/blocs/load_image_bloc/load_image_bloc.dart';
 import 'package:webant_test_app/presentation/blocs/load_popular_images_bloc/load_popular_images_bloc.dart';
 import 'package:webant_test_app/presentation/blocs/profile_bloc/profile_bloc.dart';
 import 'package:webant_test_app/presentation/blocs/profile_setting_bloc/profile_setting_bloc.dart';
 import 'package:webant_test_app/presentation/blocs/send_image_bloc/send_image_bloc.dart';
-import 'package:webant_test_app/locator.dart';
+import 'package:webant_test_app/injection.dart';
 import 'package:webant_test_app/presentation/screens/main_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:webant_test_app/presentation/screens/welcome_screen.dart';
@@ -18,16 +26,18 @@ import 'package:webant_test_app/presentation/screens/welcome_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await setDI();
+  final document = await getApplicationDocumentsDirectory();
+  await Hive.initFlutter(document.path);
+  Hive.registerAdapter(UserAdapter());
+  await Hive.openBox<User>('user_data');
+  Hive.registerAdapter(ImageModelAdapter());
+  await Hive.openBox<ImageModel>('new_image_data');
+  await Hive.openBox<ImageModel>('popular_image_data');
+
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  Future<String?> getAccessToken() async {
-    SharedPrefs _prefs = locator<SharedPrefs>();
-    String? _accessToken = await _prefs.read('access_token');
-    return _accessToken;
-  }
-
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -59,15 +69,22 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          home: FutureBuilder<String?>(
-              future: getAccessToken(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return MainScreen();
-                } else {
-                  return WelcomeScreen();
-                }
-              }),
+          home: BlocProvider(
+            create: (_) => HomePageBloc()..add(CheckIfTheUserIsAuthorized()),
+            child: Builder(
+              builder: (context) => BlocBuilder<HomePageBloc, HomePageState>(
+                builder: (context, state) {
+                  if (state is WelcomeScreenState) {
+                    return WelcomeScreen();
+                  }
+                  if (state is MainScreenState) {
+                    return MainScreen();
+                  }
+                  return Container();
+                },
+              ),
+            ),
+          ),
         ),
       ),
     );

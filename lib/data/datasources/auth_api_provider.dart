@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:webant_test_app/data/datasources/shared_prefs.dart';
 
-import 'package:webant_test_app/locator.dart';
+import 'package:webant_test_app/injection.dart';
 import 'package:webant_test_app/utils/api_constants.dart';
 
 class AuthApiProvider {
-  Dio _dio = locator.get<Dio>();
-  var _prefs = locator.get<SharedPrefs>();
+  Dio _dio = injection.get<Dio>();
+  var _prefs = injection.get<SharedPrefs>();
 
   Future<String?> authorization({
     String? username,

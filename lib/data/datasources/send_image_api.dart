@@ -4,12 +4,12 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 
 import 'package:webant_test_app/data/datasources/shared_prefs.dart';
-import 'package:webant_test_app/locator.dart';
+import 'package:webant_test_app/injection.dart';
 import 'package:webant_test_app/utils/api_constants.dart';
 
 class SendImageApiProvider {
-  Dio _dio = locator<Dio>();
-  SharedPrefs _prefs = locator<SharedPrefs>();
+  Dio _dio = injection<Dio>();
+  SharedPrefs _prefs = injection<SharedPrefs>();
 
   Future<String?> sendImageToApi({File? file,
     String? name,
