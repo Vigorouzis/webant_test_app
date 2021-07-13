@@ -5,4 +5,5 @@ abstract class ApiConstants {
   static const profileURL = 'http://gallery.dev.webant.ru/api/users';
   static const mediaObjectsURL =
       'http://gallery.dev.webant.ru/api/media_objects';
+  static const getImageURL = 'http://gallery.dev.webant.ru/media/';
 }

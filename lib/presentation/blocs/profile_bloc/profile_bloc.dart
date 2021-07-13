@@ -22,8 +22,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           var _response = await _userRepository?.getProfileInfo();
           var _imagesList = await _userRepository?.getUploadImagesFromUser();
           _response!.uploadImages = _imagesList;
-          _response.birthday =
-              "${_response.birthday.substring(8, 10)}.${_response.birthday.substring(5, 7)}.${_response.birthday.substring(0, 4)}";
           yield ProfileSuccess(user: _response);
         } catch (_) {
           yield ProfileFailed();

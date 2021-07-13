@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webant_test_app/data/models/image.dart';
-import 'package:webant_test_app/data/repositories/Connectivity.dart';
+import 'package:webant_test_app/data/datasources/Connectivity.dart';
 import 'package:webant_test_app/data/repositories/image_repository_impl.dart';
 import 'package:webant_test_app/presentation/blocs/load_image_bloc/load_image_event.dart';
 import 'package:webant_test_app/presentation/blocs/load_image_bloc/load_image_state.dart';
@@ -15,7 +15,9 @@ class LoadImageBloc extends Bloc<LoadImageEvent, LoadImageState> {
   @override
   Stream<LoadImageState> mapEventToState(LoadImageEvent event) async* {
     if (event is LoadNewImage) {
-      yield ImageLoadingState();
+      if (event.isFirstInit! || event.isRefresh! ) {
+        yield ImageLoadingState();
+      }
       if (await ConnectivityClass().checkConnectivity()) {
         try {
           var response = await _imageRepository!.getNewImage(

@@ -1,7 +1,6 @@
 import 'package:webant_test_app/data/models/enums/field_error.dart';
 
 class RegistrationState {
-  final bool? isBusy;
   final FieldError? nameError;
   final FieldError? usernameError;
   final FieldError? phoneError;
@@ -9,10 +8,8 @@ class RegistrationState {
   final FieldError? emailError;
   final FieldError? passwordError;
   final FieldError? confirmPasswordError;
-  final bool? isSumbmit;
 
   RegistrationState({
-    this.isBusy,
     this.nameError,
     this.usernameError,
     this.phoneError,
@@ -20,7 +17,6 @@ class RegistrationState {
     this.emailError,
     this.passwordError,
     this.confirmPasswordError,
-    this.isSumbmit = false,
   });
 }
 
@@ -48,3 +44,4 @@ class RegistrationError extends RegistrationState {
       this.passwordError,
       this.confirmPasswordError});
 }
+

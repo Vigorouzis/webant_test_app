@@ -7,5 +7,5 @@ abstract class AuthRepository {
       String? username,
       String? phone});
 
-  Future<String?> authorization({String? email, String? password});
+  Future<String?> authorization({String? username, String? password});
 }

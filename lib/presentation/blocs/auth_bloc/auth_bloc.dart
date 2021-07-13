@@ -13,7 +13,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       yield AuthLoading();
       try {
         var response = await _authRepository.authorization(
-          email: event.email,
+          username: event.email,
           password: event.password,
         );
         if (response == 'OK') {

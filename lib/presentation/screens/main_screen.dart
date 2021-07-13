@@ -204,8 +204,8 @@ class _LoadImageItemScreenState extends State<LoadImageItemScreen> {
                       style: widget._tabController?.index == 1
                           ? AppTypography.font17.copyWith(color: Colors.black)
                           : AppTypography.font17.copyWith(
-                        color: AppColors.greyC4C4C4,
-                      ),
+                              color: AppColors.greyC4C4C4,
+                            ),
                     ),
                   ),
                 ),
@@ -256,7 +256,8 @@ class _NewImagesTabState extends State<NewImagesTab>
 
   @override
   void initState() {
-    context.read<LoadImageBloc>().add(LoadNewImage(limit: 10, page: _page));
+    context.read<LoadImageBloc>().add(LoadNewImage(
+        limit: 10, page: _page, isFirstInit: true, isRefresh: false));
     _controller = ScrollController();
     _repository = ImageRepositoryImpl();
     widget._searchController!.addListener(() {
@@ -271,9 +272,8 @@ class _NewImagesTabState extends State<NewImagesTab>
           _controller?.position.maxScrollExtent) {
         if (_page != _countOfPages) {
           _page++;
-          context
-              .read<LoadImageBloc>()
-              .add(LoadNewImage(limit: 10, page: _page));
+          context.read<LoadImageBloc>().add(LoadNewImage(
+              limit: 10, page: _page, isFirstInit: false, isRefresh: false));
         }
       }
     });
@@ -288,9 +288,8 @@ class _NewImagesTabState extends State<NewImagesTab>
           return RefreshIndicator(
             onRefresh: () async {
               _page = 1;
-              context
-                  .read<LoadImageBloc>()
-                  .add(LoadNewImage(limit: 10, page: _page, isRefresh: true));
+              context.read<LoadImageBloc>().add(LoadNewImage(
+                  limit: 10, page: _page, isRefresh: true, isFirstInit: false));
             },
             child: ListView(
               children: [
@@ -337,7 +336,7 @@ class _NewImagesTabState extends State<NewImagesTab>
               _page = 1;
               context
                   .read<LoadImageBloc>()
-                  .add(LoadNewImage(limit: 10, page: _page, isRefresh: true));
+                  .add(LoadNewImage(limit: 10, page: _page, isRefresh: true, isFirstInit: false));
             },
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -348,37 +347,33 @@ class _NewImagesTabState extends State<NewImagesTab>
                     crossAxisSpacing: 5.0,
                     mainAxisSpacing: 5.0,
                   ),
-                  itemCount: state.newImageList!.length + 1,
+                  itemCount: state.newImageList!.length,
                   itemBuilder: (context, index) {
-                    if (index == state.newImageList?.length) {
-                      return CupertinoActivityIndicator();
-                    } else {
-                      return GestureDetector(
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => DetailImageScreen(
-                              image: state.newImageList![index],
-                            ),
+                    return GestureDetector(
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => DetailImageScreen(
+                            image: state.newImageList![index],
                           ),
                         ),
-                        child: CachedNetworkImage(
-                          placeholder: (context, url) => Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                          imageUrl:
-                              'http://gallery.dev.webant.ru/media/${state.newImageList?[index]!.name}',
-                          imageBuilder: (context, imageProvider) => Container(
-                            width: 166.w,
-                            height: 166.h,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(
-                                  image: imageProvider, fit: BoxFit.cover),
-                            ),
+                      ),
+                      child: CachedNetworkImage(
+                        placeholder: (context, url) => Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        imageUrl:
+                            '${ApiConstants.getImageURL}${state.newImageList?[index]!.name}',
+                        imageBuilder: (context, imageProvider) => Container(
+                          width: 166.w,
+                          height: 166.h,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                                image: imageProvider, fit: BoxFit.cover),
                           ),
                         ),
-                      );
-                    }
+                      ),
+                    );
                   }),
             ),
           );
@@ -393,7 +388,7 @@ class _NewImagesTabState extends State<NewImagesTab>
 }
 
 class PopularImagesTab extends StatefulWidget {
-  TextEditingController? _searchController;
+  final TextEditingController? _searchController;
 
   PopularImagesTab({Key? key, TextEditingController? searchController})
       : _searchController = searchController,
@@ -419,7 +414,7 @@ class _PopularImagesTabState extends State<PopularImagesTab>
   void initState() {
     context
         .read<LoadPopularImageBloc>()
-        .add(LoadPopularImage(limit: 10, page: _page, isRefresh: false));
+        .add(LoadPopularImage(limit: 10, page: _page, isRefresh: false, isFirstInit: true));
     _controller = ScrollController();
     _repository = ImageRepositoryImpl();
     widget._searchController!.addListener(() {
@@ -436,7 +431,7 @@ class _PopularImagesTabState extends State<PopularImagesTab>
           _page++;
           context
               .read<LoadPopularImageBloc>()
-              .add(LoadPopularImage(limit: 10, page: _page));
+              .add(LoadPopularImage(limit: 10, page: _page, isRefresh: false, isFirstInit: false));
         }
       }
     });
@@ -452,7 +447,7 @@ class _PopularImagesTabState extends State<PopularImagesTab>
             onRefresh: () async {
               _page = 1;
               context.read<LoadPopularImageBloc>().add(
-                  LoadPopularImage(limit: 10, page: _page, isRefresh: true));
+                  LoadPopularImage(limit: 10, page: _page, isRefresh: true, isFirstInit: false));
             },
             child: ListView(
               children: [
@@ -499,7 +494,7 @@ class _PopularImagesTabState extends State<PopularImagesTab>
               _page = 1;
               context
                   .read<LoadPopularImageBloc>()
-                  .add(LoadPopularImage(limit: 10, page: 1, isRefresh: true));
+                  .add(LoadPopularImage(limit: 10, page: 1, isRefresh: true, isFirstInit: false));
             },
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -510,37 +505,33 @@ class _PopularImagesTabState extends State<PopularImagesTab>
                     crossAxisSpacing: 5.0,
                     mainAxisSpacing: 5.0,
                   ),
-                  itemCount: state.popularImageFileNameList!.length + 1,
+                  itemCount: state.popularImageFileNameList!.length,
                   itemBuilder: (context, index) {
-                    if (index == state.popularImageFileNameList?.length) {
-                      return CupertinoActivityIndicator();
-                    } else {
-                      return GestureDetector(
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => DetailImageScreen(
-                              image: state.popularImageFileNameList![index],
-                            ),
+                    return GestureDetector(
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => DetailImageScreen(
+                            image: state.popularImageFileNameList![index],
                           ),
                         ),
-                        child: CachedNetworkImage(
-                          placeholder: (context, url) => Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                          imageUrl:
-                              'http://gallery.dev.webant.ru/media/${state.popularImageFileNameList?[index]!.name}',
-                          imageBuilder: (context, imageProvider) => Container(
-                            width: 166.w,
-                            height: 166.h,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(
-                                  image: imageProvider, fit: BoxFit.fill),
-                            ),
+                      ),
+                      child: CachedNetworkImage(
+                        placeholder: (context, url) => Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        imageUrl:
+                            '${ApiConstants.getImageURL}${state.popularImageFileNameList?[index]!.name}',
+                        imageBuilder: (context, imageProvider) => Container(
+                          width: 166.w,
+                          height: 166.h,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                                image: imageProvider, fit: BoxFit.fill),
                           ),
                         ),
-                      );
-                    }
+                      ),
+                    );
                   }),
             ),
           );

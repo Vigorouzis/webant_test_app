@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 
 class ImageEntity extends HiveObject{
   final String? name;
-  String? dateCreate;
+  DateTime? dateCreate;
   final String? user;
   final String? description;
 

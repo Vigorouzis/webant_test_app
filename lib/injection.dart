@@ -1,13 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:webant_test_app/data/datasources/auth_api_provider.dart';
-import 'package:webant_test_app/data/datasources/image_api_provider.dart';
-import 'package:webant_test_app/data/datasources/send_image_api.dart';
 import 'package:webant_test_app/data/datasources/shared_prefs.dart';
-import 'package:webant_test_app/data/datasources/user_api_provider.dart';
-
+import 'package:webant_test_app/data/repositories/auth_repository_impl.dart';
+import 'package:webant_test_app/data/repositories/image_repository_impl.dart';
+import 'package:webant_test_app/data/repositories/send_image_repository_impl.dart';
+import 'package:webant_test_app/data/repositories/user_repository_impl.dart';
 import 'package:webant_test_app/token_interceptor.dart';
 
 final injection = GetIt.I;
@@ -29,9 +27,12 @@ Future<void> setDI() async {
   dio.interceptors.add(TokenInterceptor(
       dio: injection.get<Dio>(), preferences: injection.get<SharedPrefs>()));
 
-  injection.registerLazySingleton<AuthApiProvider>(() => AuthApiProvider());
-  injection.registerLazySingleton<ImageApiProvider>(() => ImageApiProvider());
-  injection.registerLazySingleton<UserApiProvider>(() => UserApiProvider());
-  injection.registerLazySingleton<SendImageApiProvider>(
-      () => SendImageApiProvider());
+  injection
+      .registerLazySingleton<AuthRepositoryImpl>(() => AuthRepositoryImpl());
+  injection
+      .registerLazySingleton<ImageRepositoryImpl>(() => ImageRepositoryImpl());
+  injection
+      .registerLazySingleton<UserRepositoryImpl>(() => UserRepositoryImpl());
+  injection.registerLazySingleton<SendImageRepositoryImpl>(
+      () => SendImageRepositoryImpl());
 }

@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 
 class UserEntity extends HiveObject {
   final String name;
-  String birthday;
+  DateTime birthday;
   final String? email;
   final String? phone;
   final String? password;

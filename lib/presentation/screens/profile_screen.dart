@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webant_test_app/data/datasources/date_helper.dart';
 import 'package:webant_test_app/presentation/blocs/profile_bloc/profile_bloc.dart';
 import 'package:webant_test_app/presentation/blocs/profile_bloc/profile_event.dart';
 import 'package:webant_test_app/presentation/blocs/profile_bloc/profile_state.dart';
@@ -117,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Padding(
                       padding: EdgeInsets.only(top: 8.h),
                       child: Text(
-                        state.user!.birthday,
+                        DateHelper.getFormattedString(date: state.user!.birthday, datePattern: DateHelper.digitMonth,countryCode: 'ru'),
                         style: AppTypography.font12
                             .copyWith(color: AppColors.greyC4C4C4),
                       ),

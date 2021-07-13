@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webant_test_app/data/models/image.dart';
-import 'package:webant_test_app/data/repositories/Connectivity.dart';
+import 'package:webant_test_app/data/datasources/Connectivity.dart';
 import 'package:webant_test_app/data/repositories/image_repository_impl.dart';
 import 'package:webant_test_app/presentation/blocs/load_popular_images_bloc/load_popular_images_event.dart';
 import 'package:webant_test_app/presentation/blocs/load_popular_images_bloc/load_popular_images_state.dart';
@@ -17,8 +17,9 @@ class LoadPopularImageBloc
   Stream<LoadPopularImageState> mapEventToState(
       LoadPopularImageEvent event) async* {
     if (event is LoadPopularImage) {
-      yield PopularImageLoadingState();
-
+      if (event.isRefresh! || event.isFirstInit!) {
+        yield PopularImageLoadingState();
+      }
       if (await ConnectivityClass().checkConnectivity()) {
         try {
           var response = await _imageRepository!.getPopularImage(

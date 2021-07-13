@@ -18,7 +18,7 @@ class UserAdapter extends TypeAdapter<User> {
     };
     return User(
       name: fields[0] as String,
-      birthday: fields[1] as String,
+      birthday: fields[1] as DateTime,
       uploadImages: (fields[6] as List?)?.cast<String?>(),
       email: fields[2] as String?,
       phone: fields[3] as String?,
@@ -63,20 +63,9 @@ class UserAdapter extends TypeAdapter<User> {
 // **************************************************************************
 
 User _$UserFromJson(Map<String, dynamic> json) {
-  print(User(
-    name: json['fullName'] as String,
-    birthday: json['birthday'] as String,
-    uploadImages: (json['uploadImages'] as List<dynamic>?)
-        ?.map((e) => e as String?)
-        .toList(),
-    email: json['email'] as String?,
-    phone: json['phone'] as String?,
-    password: json['password'] as String?,
-    username: json['username'] as String,
-  ));
   return User(
     name: json['fullName'] as String,
-    birthday: json['birthday'] as String,
+    birthday: DateTime.parse(json['birthday']),
     uploadImages: (json['uploadImages'] as List<dynamic>?)
         ?.map((e) => e as String?)
         .toList(),

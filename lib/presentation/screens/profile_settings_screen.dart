@@ -28,7 +28,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
   @override
   void initState() {
     _usernameController = TextEditingController(text: widget._user!.username);
-    _birthdayController = TextEditingController(text: widget._user!.birthday);
+    _birthdayController = TextEditingController(text: widget._user!.birthday.toString());
     _emailController = TextEditingController(text: widget._user!.email);
     context
         .read<ProfileSettingsBloc>()

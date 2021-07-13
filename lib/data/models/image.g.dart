@@ -18,7 +18,7 @@ class ImageModelAdapter extends TypeAdapter<ImageModel> {
     };
     return ImageModel(
       name: fields[0] as String?,
-      dateCreate: fields[1] as String?,
+      dateCreate: fields[1] as DateTime?,
       user: fields[2] as String?,
       description: fields[3] as String?,
     );
@@ -56,7 +56,7 @@ class ImageModelAdapter extends TypeAdapter<ImageModel> {
 ImageModel _$ImageModelFromJson(Map<String, dynamic> json) {
   return ImageModel(
     name: json['image']['name'] as String?,
-    dateCreate: json['dateCreate'] as String?,
+    dateCreate: DateTime.parse(json['dateCreate']),
     user: json['user'] as String?,
     description: json['description'] as String?,
   );
