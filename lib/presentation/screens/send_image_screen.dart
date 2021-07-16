@@ -47,6 +47,32 @@ class _SendImageScreenState extends State<SendImageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(
+        isMainScreen: true,
+        popFunc: widget.onTabTapped,
+        leading: AppIcons.backArrow(),
+        trailing: GestureDetector(
+          onTap: () {
+            if (_nameController!.text.isNotEmpty &&
+                _descriptionController!.text.isNotEmpty) {
+              context.read<SendImageBloc>().add(
+                    SendImage(
+                      name: _nameController!.text,
+                      description: _descriptionController!.text,
+                      file: _image,
+                      newImage: true,
+                      popularImage: true,
+                    ),
+                  );
+            }
+          },
+          child: Text(
+            context.localize!.add,
+            style: AppTypography.font15.copyWith(
+                color: AppColors.pinkCF497E, fontWeight: FontWeight.w700),
+          ),
+        ),
+      ),
       body: SafeArea(
         child: BlocConsumer<SendImageBloc, SendImageState>(
           listener: (context, state) {
@@ -66,32 +92,6 @@ class _SendImageScreenState extends State<SendImageScreen> {
           },
           builder: (context, state) => Column(
             children: [
-              CustomAppBar(
-                popFunc: widget.onTabTapped,
-                leading: AppIcons.backArrow(),
-                trailing: GestureDetector(
-                  onTap: () {
-                    if (_nameController!.text.isNotEmpty &&
-                        _descriptionController!.text.isNotEmpty) {
-                      context.read<SendImageBloc>().add(
-                            SendImage(
-                              name: _nameController!.text,
-                              description: _descriptionController!.text,
-                              file: _image,
-                              newImage: true,
-                              popularImage: true,
-                            ),
-                          );
-                    }
-                  },
-                  child: Text(
-                    context.localize!.add,
-                    style: AppTypography.font15.copyWith(
-                        color: AppColors.pinkCF497E,
-                        fontWeight: FontWeight.w700),
-                  ),
-                ),
-              ),
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.only(top: 62.h, bottom: 63.h),

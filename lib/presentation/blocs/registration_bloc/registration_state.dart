@@ -27,21 +27,9 @@ class RegistrationLoading extends RegistrationState {}
 class RegistrationSuccess extends RegistrationState {}
 
 class RegistrationError extends RegistrationState {
-  final FieldError? nameError;
-  final FieldError? usernameError;
-  final FieldError? phoneError;
-  final FieldError? birthdayError;
-  final FieldError? emailError;
-  final FieldError? passwordError;
-  final FieldError? confirmPasswordError;
+  final String? message;
 
-  RegistrationError(
-      {this.nameError,
-      this.usernameError,
-      this.phoneError,
-      this.birthdayError,
-      this.emailError,
-      this.passwordError,
-      this.confirmPasswordError});
+  RegistrationError({this.message});
+
 }
 

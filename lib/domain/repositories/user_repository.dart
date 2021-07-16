@@ -5,7 +5,7 @@ abstract class UserRepository {
 
   Future<User?> sendDataToApi({
     String? username,
-    String? birthday,
+    DateTime? birthday,
     String? email,
     String? phone,
     String? fullName,

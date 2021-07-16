@@ -19,7 +19,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       if (connectivityResult == ConnectivityResult.mobile ||
           connectivityResult == ConnectivityResult.wifi) {
         try {
-          var _response = await _userRepository?.getProfileInfo();
+          var _response = await  _userRepository?.getProfileInfo();
           var _imagesList = await _userRepository?.getUploadImagesFromUser();
           _response!.uploadImages = _imagesList;
           yield ProfileSuccess(user: _response);

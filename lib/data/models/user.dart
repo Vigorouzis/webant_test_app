@@ -12,7 +12,7 @@ class User extends UserEntity {
   @HiveField(0)
   final String name;
   @HiveField(1)
-  DateTime birthday;
+  DateTime? birthday;
   @HiveField(2)
   final String? email;
   @HiveField(3)

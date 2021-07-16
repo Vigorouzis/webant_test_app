@@ -13,12 +13,13 @@ class DetailImageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(
+        isMainScreen: false,
+        leading: AppIcons.backArrow(),
+      ),
       body: SafeArea(
         child: Column(
           children: [
-            CustomAppBar(
-              leading: AppIcons.backArrow(),
-            ),
             Container(
               width: 375.w,
               height: 251.h,
@@ -30,7 +31,10 @@ class DetailImageScreen extends StatelessWidget {
               children: [
                 Text(image!.name!.substring(0, image!.name!.indexOf('.'))),
                 Spacer(),
-                Text(DateHelper.getFormattedString(date: image!.dateCreate!, datePattern: DateHelper.digitMonth,countryCode: 'ru')),
+                Text(DateHelper.getFormattedString(
+                    date: image!.dateCreate!,
+                    datePattern: DateHelper.digitMonth,
+                    countryCode: 'ru')),
               ],
             ),
             Padding(

@@ -11,26 +11,23 @@ class CustomTextField extends StatefulWidget {
   final bool obscureText;
   final int? maxLines;
   final double? height;
-  final String? errorText;
-  bool? isError;
-  final Function(String text)? error;
-  final TextInputFormatter? formatter;
 
-  CustomTextField(
-      {Key? key,
-      required this.controller,
-      required this.hintText,
-      required this.padding,
-      this.trailing,
-      this.suffixText,
-      this.obscureText = false,
-      this.maxLines,
-      this.height,
-      this.errorText,
-      this.isError = false,
-      this.error,
-      this.formatter})
-      : super(key: key);
+  final TextInputFormatter? formatter;
+  final String? Function(String?)? validator;
+
+  CustomTextField({
+    Key? key,
+    required this.controller,
+    required this.hintText,
+    required this.padding,
+    this.trailing,
+    this.suffixText,
+    this.obscureText = false,
+    this.maxLines,
+    this.height,
+    this.formatter,
+    this.validator,
+  }) : super(key: key);
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -44,23 +41,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
       child: Container(
         width: 343.w,
         // height: widget.height ?? 36.h,
-        child: TextField(
+        child: TextFormField(
+          validator: widget.validator,
           inputFormatters:
               widget.formatter != null ? [widget.formatter!] : null,
           maxLines: widget.maxLines ?? 1,
           obscureText: widget.obscureText,
           controller: widget.controller,
-          onChanged: (value) {
-            if (widget.error != null) {
-              setState(() {
-                widget.isError = widget.error!(value);
-              });
-              print(widget.isError);
-            }
-          },
           decoration: InputDecoration(
             hintText: widget.hintText,
-            errorText: widget.isError! == false ? widget.errorText : null,
             suffixText: widget.suffixText,
             suffixStyle: TextStyle(
               color: Colors.red,

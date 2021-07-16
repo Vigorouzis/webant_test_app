@@ -6,7 +6,7 @@ abstract class ProfileSettingsEvent {
 
 class SendDataToApi extends ProfileSettingsEvent {
   final String? username;
-  final String? birthday;
+  final DateTime? birthday;
   final String? email;
   final String? phone;
   final String? fullName;

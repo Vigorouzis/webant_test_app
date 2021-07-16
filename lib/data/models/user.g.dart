@@ -65,7 +65,7 @@ class UserAdapter extends TypeAdapter<User> {
 User _$UserFromJson(Map<String, dynamic> json) {
   return User(
     name: json['fullName'] as String,
-    birthday: DateTime.parse(json['birthday']),
+    birthday: json['birthday'] == null ? null : DateTime.parse(json['birthday']),
     uploadImages: (json['uploadImages'] as List<dynamic>?)
         ?.map((e) => e as String?)
         .toList(),

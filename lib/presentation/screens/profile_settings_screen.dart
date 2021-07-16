@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webant_test_app/data/datasources/date_helper.dart';
 import 'package:webant_test_app/presentation/blocs/profile_setting_bloc/profile_setting_bloc.dart';
 import 'package:webant_test_app/presentation/blocs/profile_setting_bloc/profile_settings_event.dart';
 import 'package:webant_test_app/presentation/blocs/profile_setting_bloc/profile_settings_state.dart';
@@ -28,7 +29,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
   @override
   void initState() {
     _usernameController = TextEditingController(text: widget._user!.username);
-    _birthdayController = TextEditingController(text: widget._user!.birthday.toString());
+    _birthdayController = TextEditingController(text:  widget._user!.birthday.toString());
     _emailController = TextEditingController(text: widget._user!.email);
     context
         .read<ProfileSettingsBloc>()
@@ -55,6 +56,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                   child: Column(
                     children: [
                       CustomAppBar(
+                        isMainScreen: false,
                         leading: Text(
                           context.localize!.cancel,
                           style: AppTypography.font15
@@ -71,7 +73,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                                   username: _usernameController!.text,
                                   phone: widget._user!.phone,
                                   email: _emailController!.text,
-                                  birthday: _birthdayController!.text,
+                                  birthday: DateHelper.getDateFromString(date: _birthdayController!.text),
                                   fullName: widget._user!.name,
                                 )),
                             child: Text(

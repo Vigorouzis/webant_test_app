@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:webant_test_app/data/datasources/server_not_responding.dart';
 import 'package:webant_test_app/data/datasources/shared_prefs.dart';
 import 'package:webant_test_app/domain/repositories/auth_repository.dart';
 
@@ -22,16 +23,15 @@ class AuthRepositoryImpl implements AuthRepository {
     String? clientId = await _prefs.read('client_id');
 
     var data =
-    await _dio.get('http://gallery.dev.webant.ru/api/clients/$clientId');
+        await _dio.get('http://gallery.dev.webant.ru/api/clients/$clientId');
 
     if (data.statusCode == 200) {
       clientRandomId = data.data['randomId'];
       clientSecret = data.data['secret'];
     }
 
-    Response response = await _dio.get(
-      '${ApiConstants
-          .tokenURL}?client_id=${clientId}_$clientRandomId&grant_type=password&username=$username&password=$password&client_secret=$clientSecret',
+    Response response = await  _dio.get(
+      '${ApiConstants.tokenURL}?client_id=${clientId}_$clientRandomId&grant_type=password&username=$username&password=$password&client_secret=$clientSecret',
       options: Options(
         contentType: 'application/json',
       ),
@@ -60,28 +60,38 @@ class AuthRepositoryImpl implements AuthRepository {
     String? username,
     String? phone,
   }) async {
+    var date = birthday!.isEmpty ? null : birthday;
+
     var params = {
       'email': email,
       'fullName': fullName,
       'password': password,
-      'birthday': birthday,
+      'birthday': date,
       'username': username,
       'phone': phone,
     };
+    Response response;
+    try {
+      response = await _dio.post(
+        ApiConstants.singUpURL,
+        data: jsonEncode(params),
+        options: Options(
+          contentType: 'application/json',
+        ),
+      );
 
-    Response response = await _dio.post(
-      ApiConstants.singUpURL,
-      data: jsonEncode(params),
-      options: Options(
-        contentType: 'application/json',
-      ),
-    );
+      if (response.statusCode == 400 || response.statusCode == 404) {
+        throw ServerNorResponding(message: response.data['detail']);
+      }
 
-    if (response.statusCode == 201) {
-      await _prefs.save('client_id', response.data['id']);
-      return 'OK';
-    } else {
-      return 'Not OK';
+      if (response.statusCode == 201) {
+        await _prefs.save('client_id', response.data['id']);
+        return 'OK';
+      } else {
+        return 'Not OK';
+      }
+    } catch (_) {
+      throw ServerNorResponding(message: 'Error');
     }
   }
 }

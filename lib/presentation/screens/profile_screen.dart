@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webant_test_app/data/datasources/date_helper.dart';
+import 'package:webant_test_app/data/models/user.dart';
 import 'package:webant_test_app/presentation/blocs/profile_bloc/profile_bloc.dart';
 import 'package:webant_test_app/presentation/blocs/profile_bloc/profile_event.dart';
 import 'package:webant_test_app/presentation/blocs/profile_bloc/profile_state.dart';
@@ -19,6 +20,8 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  User? _user;
+
   @override
   void initState() {
     context.read<ProfileBloc>().add(GetDataAboutProfile());
@@ -28,6 +31,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(
+        isMainScreen: true,
+        popFunc: widget.onTabTapped,
+        leading: AppIcons.backArrow(),
+        trailing: GestureDetector(
+            onTap: () async {
+              var newUser = await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => ProfileSettingsScreen(
+                    user: _user,
+                  ),
+                ),
+              );
+              if (newUser != null) {
+                context.read<ProfileBloc>().add(GetDataAboutProfile());
+              }
+            },
+            child: AppIcons.settings()),
+      ),
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async =>
@@ -76,28 +98,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 );
               }
               if (state is ProfileSuccess) {
+                _user = state.user;
                 return Column(
                   children: [
-                    CustomAppBar(
-                      popFunc: widget.onTabTapped,
-                      leading: AppIcons.backArrow(),
-                      trailing: GestureDetector(
-                          onTap: () async {
-                            var newUser = await Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => ProfileSettingsScreen(
-                                  user: state.user,
-                                ),
-                              ),
-                            );
-                            if (newUser != null) {
-                              context
-                                  .read<ProfileBloc>()
-                                  .add(GetDataAboutProfile());
-                            }
-                          },
-                          child: AppIcons.settings()),
-                    ),
                     Padding(
                       padding: EdgeInsets.only(top: 21.h),
                       child: Container(
@@ -118,7 +121,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Padding(
                       padding: EdgeInsets.only(top: 8.h),
                       child: Text(
-                        DateHelper.getFormattedString(date: state.user!.birthday, datePattern: DateHelper.digitMonth,countryCode: 'ru'),
+                        state.user!.birthday == null
+                            ? 'Не указано'
+                            : DateHelper.getFormattedString(
+                                date: state.user!.birthday!,
+                                datePattern: DateHelper.digitMonth,
+                                countryCode: 'ru'),
                         style: AppTypography.font12
                             .copyWith(color: AppColors.greyC4C4C4),
                       ),
@@ -156,7 +164,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 height: 166.h,
                                 child: CachedNetworkImage(
                                   imageUrl:
-                                      'http://gallery.dev.webant.ru/media/${state.user!.uploadImages?[index]}',
+                                      '${ApiConstants.getImageURL}${state.user!.uploadImages?[index]}',
                                 ),
                               );
                             }),
