@@ -24,6 +24,7 @@ class SendImageRepositoryImpl implements SendImageRepository {
     });
 
     var accessToken = await _prefs.read('access_token');
+    accessToken = accessToken.substring(1, accessToken.length - 1);
 
     var mediaObjectResponse = await _dio.post(
       "${ApiConstants.mediaObjectsURL}",
@@ -42,7 +43,7 @@ class SendImageRepositoryImpl implements SendImageRepository {
         'description': description,
         'new': newImage,
         'popular': popularImage,
-        'dateCreate': DateTime.now().toUtc(),
+        'dateCreate': DateTime.now().toUtc().toString(),
       };
 
       var response = await _dio.post(

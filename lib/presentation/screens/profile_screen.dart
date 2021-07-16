@@ -114,7 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Padding(
                       padding: EdgeInsets.only(top: 10.h),
                       child: Text(
-                        state.user!.username,
+                        state.user!.username!,
                         style: AppTypography.font17,
                       ),
                     ),

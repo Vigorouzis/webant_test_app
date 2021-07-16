@@ -29,9 +29,13 @@ class UserRepositoryImpl implements UserRepository {
     String? email,
     String? phone,
     String? fullName,
+    String? oldPassword,
+    String? newPassword,
+    String? confirmPassword,
   }) async {
     var clientId = await _prefs.read('client_id');
     var accessToken = await _prefs.read('access_token');
+    accessToken = accessToken.substring(1, accessToken.length - 1);
     var params = {
       'email': email,
       'phone': phone,
@@ -40,16 +44,34 @@ class UserRepositoryImpl implements UserRepository {
       'birthday': birthday,
     };
 
-    var response = await _dio.put(
-      '${ApiConstants.profileURL}/$clientId',
-      data: jsonEncode(params),
-      options: Options(headers: {
-        HttpHeaders.contentTypeHeader: 'application/json',
-        HttpHeaders.acceptHeader: "application/json",
-        HttpHeaders.authorizationHeader: 'Bearer $accessToken',
-      }),
-    );
-
+    Response? changePasswordResponse;
+    Response? response;
+    if (oldPassword!.isNotEmpty && newPassword!.isNotEmpty) {
+      changePasswordResponse = await changePassword(
+          clientId: clientId,
+          accessToken: accessToken,
+          newPassword: newPassword,
+          oldPassword: oldPassword);
+      response = await _dio.put(
+        '${ApiConstants.profileURL}/$clientId',
+        data: jsonEncode(params),
+        options: Options(headers: {
+          HttpHeaders.contentTypeHeader: 'application/json',
+          HttpHeaders.acceptHeader: "application/json",
+          HttpHeaders.authorizationHeader: 'Bearer $accessToken',
+        }),
+      );
+    } else {
+      response = await _dio.put(
+        '${ApiConstants.profileURL}/$clientId',
+        data: jsonEncode(params),
+        options: Options(headers: {
+          HttpHeaders.contentTypeHeader: 'application/json',
+          HttpHeaders.acceptHeader: "application/json",
+          HttpHeaders.authorizationHeader: 'Bearer $accessToken',
+        }),
+      );
+    }
     if (response.statusCode == 200) {
       return User.fromJson(response.data);
     } else {
@@ -73,5 +95,32 @@ class UserRepositoryImpl implements UserRepository {
     } else {
       throw Exception('Failed load user');
     }
+  }
+
+  @override
+  Future<Response?>? changePassword({
+    String? oldPassword,
+    String? newPassword,
+    String? accessToken,
+    String? clientId,
+  }) async {
+    var params = {
+      'oldPassword': oldPassword,
+      'newPassword': newPassword,
+    };
+
+    var response = await _dio.put(
+      '${ApiConstants.changePasswordURL}/$clientId',
+      data: jsonEncode(params),
+      options: Options(headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.acceptHeader: "application/json",
+        HttpHeaders.authorizationHeader: 'Bearer $accessToken',
+      }),
+    );
+    if (response.statusCode == 200) {
+      return response;
+    }
+    return null;
   }
 }

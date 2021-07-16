@@ -53,8 +53,7 @@ class _SendImageScreenState extends State<SendImageScreen> {
         leading: AppIcons.backArrow(),
         trailing: GestureDetector(
           onTap: () {
-            if (_nameController!.text.isNotEmpty &&
-                _descriptionController!.text.isNotEmpty) {
+            if (_image != null && _nameController!.text.isNotEmpty) {
               context.read<SendImageBloc>().add(
                     SendImage(
                       name: _nameController!.text,

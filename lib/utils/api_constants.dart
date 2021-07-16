@@ -6,4 +6,5 @@ abstract class ApiConstants {
   static const mediaObjectsURL =
       'http://gallery.dev.webant.ru/api/media_objects';
   static const getImageURL = 'http://gallery.dev.webant.ru/media/';
+  static const changePasswordURL ='http://gallery.dev.webant.ru/api/users/update_password';
 }

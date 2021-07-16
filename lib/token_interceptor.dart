@@ -33,7 +33,7 @@ class TokenInterceptor extends Interceptor {
   Future onError(DioError err, ErrorInterceptorHandler handler) async {
     if (err.response!.statusCode == 401) {
       String? refreshToken = await preferences?.read('refresh_token');
-      refreshToken = refreshToken?.substring(1, refreshToken.length - 1);
+      //refreshToken = refreshToken?.substring(1, refreshToken.length - 1);
       // print(refreshToken);
       String? clientId = await preferences!.read('client_id');
       String? clientSecret;
@@ -61,9 +61,14 @@ class TokenInterceptor extends Interceptor {
           }, method: 'GET'),
         );
 
-        await preferences!.save('access_token', response.data['access_token']);
+        var accessToken = response.data['access_token'] as String;
+        accessToken = accessToken.substring(1, accessToken.length - 1);
+        var refToken = response.data['refresh_token'] as String;
+        refToken = refToken.substring(1, refreshToken.length - 1);
+
+        await preferences!.save('access_token', accessToken);
         await preferences!
-            .save('refresh_token', response.data['refresh_token']);
+            .save('refresh_token', refToken);
       } else {
         return err;
       }

@@ -10,7 +10,7 @@ part 'user.g.dart';
 @HiveType(typeId: 0)
 class User extends UserEntity {
   @HiveField(0)
-  final String name;
+  final String? name;
   @HiveField(1)
   DateTime? birthday;
   @HiveField(2)
@@ -20,19 +20,19 @@ class User extends UserEntity {
   @HiveField(4)
   final String? password;
   @HiveField(5)
-  final String username;
+  final String? username;
   @HiveField(6)
   List<String?>? uploadImages;
   File? avatar;
 
   User({
-    required this.name,
-    required this.birthday,
-    required this.uploadImages,
+    this.name,
+    this.birthday,
+    this.uploadImages,
     this.email,
     this.phone,
     this.password,
-    required this.username,
+    this.username,
     this.avatar,
   }) : super(
             birthday: birthday,

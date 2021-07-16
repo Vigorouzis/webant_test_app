@@ -10,9 +10,20 @@ class SendDataToApi extends ProfileSettingsEvent {
   final String? email;
   final String? phone;
   final String? fullName;
+  final String? oldPassword;
+  final String? newPassword;
+  final String? confirmPassword;
 
-  const SendDataToApi(
-      {this.username, this.birthday, this.email, this.phone, this.fullName});
+  const SendDataToApi({
+    this.username,
+    this.birthday,
+    this.email,
+    this.phone,
+    this.fullName,
+    this.oldPassword,
+    this.newPassword,
+    this.confirmPassword,
+  });
 }
 
 class SetProfileAvatar extends ProfileSettingsEvent {

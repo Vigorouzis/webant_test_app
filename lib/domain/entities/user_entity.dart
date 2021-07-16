@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:hive/hive.dart';
 
 class UserEntity extends HiveObject {
-  final String name;
+  final String? name;
   DateTime? birthday;
   final String? email;
   final String? phone;
   final String? password;
-  final String username;
+  final String? username;
   List<String?>? uploadImages;
   File? avatar;
 

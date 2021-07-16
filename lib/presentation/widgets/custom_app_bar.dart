@@ -50,7 +50,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     padding: EdgeInsets.only(right: 16.0),
                     child: GestureDetector(
                       onTap: () => onTap,
-                      child: SizedBox(
+                      child: Container(
+                        color: Colors.white10,
                         width: 100.w,
                         height: 44.h,
                         child: Align(

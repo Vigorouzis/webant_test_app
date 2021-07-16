@@ -33,5 +33,7 @@
   "save": "Сохранить",
   "name": "Имя",
   "description": "Описание",
-  "dataChanged": "Данные изменены"
+  "dataChanged": "Данные изменены",
+  "oldPassword": "Старый пароль",
+  "newPassword": "Новый пароль"
 }

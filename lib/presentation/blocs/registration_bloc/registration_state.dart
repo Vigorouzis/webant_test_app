@@ -1,23 +1,5 @@
-import 'package:webant_test_app/data/models/enums/field_error.dart';
-
-class RegistrationState {
-  final FieldError? nameError;
-  final FieldError? usernameError;
-  final FieldError? phoneError;
-  final FieldError? birthdayError;
-  final FieldError? emailError;
-  final FieldError? passwordError;
-  final FieldError? confirmPasswordError;
-
-  RegistrationState({
-    this.nameError,
-    this.usernameError,
-    this.phoneError,
-    this.birthdayError,
-    this.emailError,
-    this.passwordError,
-    this.confirmPasswordError,
-  });
+abstract class RegistrationState {
+  const RegistrationState();
 }
 
 class InitRegistrationState extends RegistrationState {}
@@ -30,6 +12,4 @@ class RegistrationError extends RegistrationState {
   final String? message;
 
   RegistrationError({this.message});
-
 }
-

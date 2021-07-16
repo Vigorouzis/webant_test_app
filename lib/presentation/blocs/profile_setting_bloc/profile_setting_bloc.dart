@@ -28,6 +28,8 @@ class ProfileSettingsBloc
           email: event.email,
           phone: event.phone,
           username: event.username,
+          oldPassword: event.oldPassword,
+          newPassword: event.newPassword
         );
         if (response != null) {
           yield ProfileSettingsLoaded(user: response);
@@ -40,15 +42,15 @@ class ProfileSettingsBloc
     }
 
     if (event is SetProfileAvatar) {
-      yield ProfileSettingsLoadingState();
-      _getFromGallery(event.user);
+
+     await _getFromGallery(event.user);
       if (event.user!.avatar != null) {
         yield InitProfileSettingsState(user: event.user);
       }
     }
   }
 
-  void _getFromGallery(User? user) async {
+  Future<void> _getFromGallery(User? user)  async {
     PickedFile? pickedFile = await ImagePicker().getImage(
       source: ImageSource.gallery,
       maxWidth: 1800,

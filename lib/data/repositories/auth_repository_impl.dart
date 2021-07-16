@@ -43,8 +43,8 @@ class AuthRepositoryImpl implements AuthRepository {
       var refreshToken = response.data['refresh_token'] as String;
       refreshToken = refreshToken.substring(1, refreshToken.length - 1);
 
-      await _prefs.save('access_token', accessToken);
-      await _prefs.save('refresh_token', refreshToken);
+      await _prefs.save('access_token', response.data['access_token']);
+      await _prefs.save('refresh_token', response.data['refresh_token']);
       return 'OK';
     } else {
       return 'Not OK';

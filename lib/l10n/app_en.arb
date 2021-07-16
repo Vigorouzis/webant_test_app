@@ -33,5 +33,7 @@
   "save": "Save",
   "name": "Name",
   "description": "Description",
-  "dataChanged": "Data changed"
+  "dataChanged": "Data changed",
+  "oldPassword": "Old password",
+  "newPassword": "New password"
 }
