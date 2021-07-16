@@ -52,6 +52,7 @@ class WelcomeScreen extends StatelessWidget {
                   height: 36.h,
                   width: 343.w,
                   child: ElevatedButton(
+
                     onPressed: () => Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => SingInScreen(),
@@ -62,6 +63,7 @@ class WelcomeScreen extends StatelessWidget {
                       style: AppTypography.font14.copyWith(color: Colors.black),
                     ),
                     style: ElevatedButton.styleFrom(
+                      side: BorderSide(width:1, color:Colors.black),
                       onSurface: AppColors.black1D1D1D,
                       primary: Colors.white,
                     ),
