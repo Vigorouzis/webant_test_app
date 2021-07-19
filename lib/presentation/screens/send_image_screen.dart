@@ -8,9 +8,10 @@ import 'package:webant_test_app/presentation/blocs/send_image_bloc/send_image_ev
 import 'package:webant_test_app/presentation/blocs/send_image_bloc/send_image_state.dart';
 import 'package:webant_test_app/utils/utils.dart';
 import 'package:webant_test_app/presentation/widgets/widgets.dart';
+
 class SendImageScreen extends StatefulWidget {
   int? index;
-  Function(int)? onTabTapped;
+  final Function(int)? onTabTapped;
 
   SendImageScreen({Key? key, this.index, this.onTabTapped}) : super(key: key);
 
@@ -22,7 +23,6 @@ class _SendImageScreenState extends State<SendImageScreen> {
   File? _image;
   TextEditingController? _nameController;
   TextEditingController? _descriptionController;
-
 
   @override
   void initState() {
@@ -47,6 +47,31 @@ class _SendImageScreenState extends State<SendImageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(
+        isMainScreen: true,
+        popFunc: widget.onTabTapped,
+        leading: AppIcons.backArrow(),
+        trailing: GestureDetector(
+          onTap: () {
+            if (_image != null && _nameController!.text.isNotEmpty) {
+              context.read<SendImageBloc>().add(
+                    SendImage(
+                      name: _nameController!.text,
+                      description: _descriptionController!.text,
+                      file: _image,
+                      newImage: true,
+                      popularImage: true,
+                    ),
+                  );
+            }
+          },
+          child: Text(
+            context.localize!.add,
+            style: AppTypography.font15.copyWith(
+                color: AppColors.pinkCF497E, fontWeight: FontWeight.w700),
+          ),
+        ),
+      ),
       body: SafeArea(
         child: BlocConsumer<SendImageBloc, SendImageState>(
           listener: (context, state) {
@@ -66,31 +91,6 @@ class _SendImageScreenState extends State<SendImageScreen> {
           },
           builder: (context, state) => Column(
             children: [
-              CustomAppBar(
-                leading: AppIcons.backArrow(),
-                trailing: GestureDetector(
-                  onTap: () {
-                    if (_nameController!.text.isNotEmpty &&
-                        _descriptionController!.text.isNotEmpty) {
-                      context.read<SendImageBloc>().add(
-                            SendImage(
-                              name: _nameController!.text,
-                              description: _descriptionController!.text,
-                              file: _image,
-                              newImage: true,
-                              popularImage: true,
-                            ),
-                          );
-                    }
-                  },
-                  child: Text(
-                    context.localize!.add,
-                    style: AppTypography.font15.copyWith(
-                        color: AppColors.pinkCF497E,
-                        fontWeight: FontWeight.w700),
-                  ),
-                ),
-              ),
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.only(top: 62.h, bottom: 63.h),

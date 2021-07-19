@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webant_test_app/data/datasources/date_helper.dart';
+import 'package:webant_test_app/data/models/user.dart';
 import 'package:webant_test_app/presentation/blocs/profile_bloc/profile_bloc.dart';
 import 'package:webant_test_app/presentation/blocs/profile_bloc/profile_event.dart';
 import 'package:webant_test_app/presentation/blocs/profile_bloc/profile_state.dart';
@@ -8,15 +10,17 @@ import 'package:webant_test_app/presentation/screens/profile_settings_screen.dar
 import 'package:webant_test_app/presentation/widgets/widgets.dart';
 import 'package:webant_test_app/utils/utils.dart';
 
-
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  final Function(int)? onTabTapped;
+
+  const ProfileScreen({Key? key, this.onTabTapped}) : super(key: key);
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  User? _user;
 
   @override
   void initState() {
@@ -27,6 +31,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(
+        isMainScreen: true,
+        popFunc: widget.onTabTapped,
+        leading: AppIcons.backArrow(),
+        trailing: GestureDetector(
+            onTap: () async {
+              var newUser = await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => ProfileSettingsScreen(
+                    user: _user,
+                  ),
+                ),
+              );
+              if (newUser != null) {
+                context.read<ProfileBloc>().add(GetDataAboutProfile());
+              }
+            },
+            child: AppIcons.settings()),
+      ),
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async =>
@@ -34,36 +57,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: BlocBuilder<ProfileBloc, ProfileState>(
             builder: (context, state) {
               if (state is ProfileFailed) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset('assets/icons/webant_logo_error.png'),
-                      Padding(
-                        padding: EdgeInsets.only(top: 8.h),
-                        child: Text(
-                          context.localize!.sorry,
-                          style: AppTypography.font17
-                              .copyWith(color: AppColors.greyC4C4C4),
-                        ),
+                return ListView(
+                  children: [
+                    Container(
+                      height: 220.h,
+                      child: Text(''),
+                    ),
+                    AppIcons.webantErrorLogo(),
+                    Padding(
+                      padding: EdgeInsets.only(top: 8.h),
+                      child: Text(
+                        context.localize!.sorry,
+                        style: AppTypography.font17
+                            .copyWith(color: AppColors.greyC4C4C4),
+                        textAlign: TextAlign.center,
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 8.h),
-                        child: Text(
-                          context.localize!.noProfileData,
-                          style: AppTypography.font12
-                              .copyWith(color: AppColors.greyC4C4C4),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      Text(
-                        context.localize!.pleaseComeBackLater,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 8.h),
+                      child: Text(
+                        context.localize!.noProfileData,
                         style: AppTypography.font12
                             .copyWith(color: AppColors.greyC4C4C4),
                         textAlign: TextAlign.center,
                       ),
-                    ],
-                  ),
+                    ),
+                    Text(
+                      context.localize!.pleaseComeBackLater,
+                      style: AppTypography.font12
+                          .copyWith(color: AppColors.greyC4C4C4),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 );
               }
 
@@ -73,20 +98,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 );
               }
               if (state is ProfileSuccess) {
+                _user = state.user;
                 return Column(
                   children: [
-                    CustomAppBar(
-                      leading: AppIcons.backArrow(),
-                      trailing: GestureDetector(
-                          onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => ProfileSettingsScreen(
-                                    user: state.user,
-                                  ),
-                                ),
-                              ),
-                          child: AppIcons.settings()),
-                    ),
                     Padding(
                       padding: EdgeInsets.only(top: 21.h),
                       child: Container(
@@ -94,21 +108,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           width: 100.h,
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              border:
-                                  Border.all(color: AppColors.greyC4C4C4)),
+                              border: Border.all(color: AppColors.greyC4C4C4)),
                           child: AppIcons.profilePhoto()),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 10.h),
                       child: Text(
-                        state.user.username,
+                        state.user!.username!,
                         style: AppTypography.font17,
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 8.h),
                       child: Text(
-                        state.user.birthday,
+                        state.user!.birthday == null
+                            ? 'Не указано'
+                            : DateHelper.getFormattedString(
+                                date: state.user!.birthday!,
+                                datePattern: DateHelper.digitMonth,
+                                countryCode: 'ru'),
                         style: AppTypography.font12
                             .copyWith(color: AppColors.greyC4C4C4),
                       ),
@@ -131,31 +149,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 10.h),
-                      child:
-                          Divider(height: 2.h, color: AppColors.greyC4C4C4),
+                      child: Divider(height: 2.h, color: AppColors.greyC4C4C4),
                     ),
-                    state.user.uploadImages!.isNotEmpty
-                        ? Expanded(
-                            child: GridView.builder(
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 4),
-                                itemCount:
-                                    state.user.uploadImages!.length + 1,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    width: 166.w,
-                                    height: 166.h,
-                                    child: CachedNetworkImage(
-                                      imageUrl:
-                                          'http://gallery.dev.webant.ru/media/${state.user.uploadImages?[index]}',
-                                    ),
-                                  );
-                                }),
-                          )
-                        : Center(
-                            child: Text(context.localize!.noPhoto),
-                          ),
+                    if (state.user!.uploadImages!.isNotEmpty)
+                      Expanded(
+                        child: GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 4),
+                            itemCount: state.user!.uploadImages!.length + 1,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                width: 166.w,
+                                height: 166.h,
+                                child: CachedNetworkImage(
+                                  imageUrl:
+                                      '${ApiConstants.getImageURL}${state.user!.uploadImages?[index]}',
+                                ),
+                              );
+                            }),
+                      )
+                    else
+                      Center(
+                        child: Text(context.localize!.noPhoto),
+                      ),
                   ],
                 );
               }

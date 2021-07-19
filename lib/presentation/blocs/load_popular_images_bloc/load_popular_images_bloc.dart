@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webant_test_app/data/models/image.dart';
+import 'package:webant_test_app/data/datasources/Connectivity.dart';
 import 'package:webant_test_app/data/repositories/image_repository_impl.dart';
 import 'package:webant_test_app/presentation/blocs/load_popular_images_bloc/load_popular_images_event.dart';
 import 'package:webant_test_app/presentation/blocs/load_popular_images_bloc/load_popular_images_state.dart';
-import 'package:connectivity/connectivity.dart';
 
 class LoadPopularImageBloc
     extends Bloc<LoadPopularImageEvent, LoadPopularImageState> {
@@ -17,10 +17,10 @@ class LoadPopularImageBloc
   Stream<LoadPopularImageState> mapEventToState(
       LoadPopularImageEvent event) async* {
     if (event is LoadPopularImage) {
-      yield PopularImageLoadingState();
-      var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.mobile ||
-          connectivityResult == ConnectivityResult.wifi) {
+      if (event.isRefresh! || event.isFirstInit!) {
+        yield PopularImageLoadingState();
+      }
+      if (await ConnectivityClass().checkConnectivity()) {
         try {
           var response = await _imageRepository!.getPopularImage(
               event.page, event.limit, event.isRefresh, event.isTabChanged);
@@ -33,7 +33,7 @@ class LoadPopularImageBloc
       }
     }
     if (event is SearchInPopularImageList) {
-      List<ImageModel?> searchNewImageList = [];
+      List<ImageModel?> searchPopularImageList = [];
 
       List<ImageModel?> result = [];
 
@@ -41,12 +41,12 @@ class LoadPopularImageBloc
 
       result.forEach((element) {
         if (element!.name!.contains(event.searchText)) {
-          searchNewImageList.add(element);
+          searchPopularImageList.add(element);
         }
       });
-      if (searchNewImageList.isNotEmpty) {
+      if (searchPopularImageList.isNotEmpty) {
         yield LoadPopularImageSuccess(
-            popularImageFileNameList: searchNewImageList);
+            popularImageFileNameList: searchPopularImageList);
       } else {
         yield LoadPopularImageFailed();
       }

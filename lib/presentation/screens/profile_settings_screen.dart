@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webant_test_app/data/datasources/date_helper.dart';
 import 'package:webant_test_app/presentation/blocs/profile_setting_bloc/profile_setting_bloc.dart';
 import 'package:webant_test_app/presentation/blocs/profile_setting_bloc/profile_settings_event.dart';
 import 'package:webant_test_app/presentation/blocs/profile_setting_bloc/profile_settings_state.dart';
@@ -24,13 +25,35 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
   TextEditingController? _usernameController;
   TextEditingController? _birthdayController;
   TextEditingController? _emailController;
+  TextEditingController? _oldPasswordController;
+  TextEditingController? _newPasswordController;
+  TextEditingController? _confirmPasswordController;
 
   @override
   void initState() {
     _usernameController = TextEditingController(text: widget._user!.username);
-    _birthdayController = TextEditingController(text: widget._user!.birthday);
+    _birthdayController =
+        TextEditingController(text: widget._user!.birthday.toString());
     _emailController = TextEditingController(text: widget._user!.email);
+    _oldPasswordController = TextEditingController();
+    _newPasswordController = TextEditingController();
+    _confirmPasswordController = TextEditingController();
+
+    context
+        .read<ProfileSettingsBloc>()
+        .emit(InitProfileSettingsState(user: widget._user));
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _usernameController!.dispose();
+    _birthdayController!.dispose();
+    _emailController!.dispose();
+    _oldPasswordController!.dispose();
+    _newPasswordController!.dispose();
+    _confirmPasswordController!.dispose();
   }
 
   @override
@@ -40,7 +63,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
         child: BlocConsumer<ProfileSettingsBloc, ProfileSettingsState>(
           listener: (context, state) {
             if (state is ProfileSettingsLoaded) {
-              Navigator.of(context).pop();
+              Navigator.of(context).pop(state.user);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(context.localize!.dataChanged),
@@ -52,6 +75,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
             child: Column(
               children: [
                 CustomAppBar(
+                  isMainScreen: false,
                   leading: Text(
                     context.localize!.cancel,
                     style: AppTypography.font15
@@ -67,8 +91,13 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                                 username: _usernameController!.text,
                                 phone: widget._user!.phone,
                                 email: _emailController!.text,
-                                birthday: _birthdayController!.text,
+                                birthday: _birthdayController!.text == 'null'
+                                    ? null
+                                    : DateHelper.getDateFromString(
+                                        date: _birthdayController!.text),
                                 fullName: widget._user!.name,
+                                oldPassword: _oldPasswordController!.text,
+                                newPassword: _newPasswordController!.text,
                               )),
                       child: Text(
                         context.localize!.save,
@@ -82,21 +111,29 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                 Padding(
                   padding: EdgeInsets.only(top: 21.h),
                   child: Container(
-                    height: 100.w,
-                    width: 100.w,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.greyC4C4C4),
-                    ),
-                    child: AppIcons.profilePhoto(),
-                  ),
+                      height: 100.w,
+                      width: 100.w,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppColors.greyC4C4C4),
+                      ),
+                      child: AppIcons.profilePhoto()),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 10.h),
-                  child: Text(
-                    context.localize!.uploadPhoto,
-                    style: AppTypography.font12
-                        .copyWith(color: AppColors.greyC4C4C4),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        context.read<ProfileSettingsBloc>().add(
+                              SetProfileAvatar(user: widget._user),
+                            );
+                      });
+                    },
+                    child: Text(
+                      context.localize!.uploadPhoto,
+                      style: AppTypography.font12
+                          .copyWith(color: AppColors.greyC4C4C4),
+                    ),
                   ),
                 ),
                 Padding(
@@ -133,7 +170,35 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                 ),
                 CustomTextField(
                   controller: _emailController,
-                  hintText: context.localize!.birthday,
+                  hintText: context.localize!.email,
+                  padding: EdgeInsets.only(top: 20.h, left: 16.w, right: 16.w),
+                  trailing: AppIcons.email(),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 39.h, left: 16.w),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      context.localize!.password,
+                      style: AppTypography.font14,
+                    ),
+                  ),
+                ),
+                CustomTextField(
+                  controller: _oldPasswordController,
+                  hintText: context.localize!.oldPassword,
+                  padding: EdgeInsets.only(top: 20.h, left: 16.w, right: 16.w),
+                  trailing: AppIcons.email(),
+                ),
+                CustomTextField(
+                  controller: _newPasswordController,
+                  hintText: context.localize!.newPassword,
+                  padding: EdgeInsets.only(top: 20.h, left: 16.w, right: 16.w),
+                  trailing: AppIcons.email(),
+                ),
+                CustomTextField(
+                  controller: _confirmPasswordController,
+                  hintText: context.localize!.confirmPassword,
                   padding: EdgeInsets.only(top: 20.h, left: 16.w, right: 16.w),
                   trailing: AppIcons.email(),
                 ),

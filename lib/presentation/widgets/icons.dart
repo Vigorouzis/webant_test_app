@@ -97,5 +97,12 @@ abstract class AppIcons {
         fit: BoxFit.none,
       );
 
+  static Widget webantErrorLogo() => SvgPicture.asset(
+    'assets/icons/webant_error_logo.svg',
+    width: 76.w,
+    height: 88.h,
+    fit: BoxFit.none,
+  );
+
 
 }

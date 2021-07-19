@@ -9,9 +9,9 @@ class InitProfileState extends ProfileState {}
 class ProfileLoadingState extends ProfileState {}
 
 class ProfileSuccess extends ProfileState {
-  final User user;
+  User? user;
 
-  ProfileSuccess({required this.user});
+  ProfileSuccess({this.user});
 }
 
 class ProfileFailed extends ProfileState {}

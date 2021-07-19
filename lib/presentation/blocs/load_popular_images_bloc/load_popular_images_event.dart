@@ -7,12 +7,14 @@ class LoadPopularImage extends LoadPopularImageEvent {
   final int? limit;
   final bool? isRefresh;
   final bool? isTabChanged;
+  final bool? isFirstInit;
 
   const LoadPopularImage({
     this.page,
     this.limit,
     this.isRefresh,
     this.isTabChanged,
+    this.isFirstInit,
   });
 }
 

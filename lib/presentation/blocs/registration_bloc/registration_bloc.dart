@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:webant_test_app/data/datasources/server_not_responding.dart';
 import 'package:webant_test_app/data/repositories/auth_repository_impl.dart';
 import 'package:webant_test_app/presentation/blocs/registration_bloc/registration_event.dart';
 import 'package:webant_test_app/presentation/blocs/registration_bloc/registration_state.dart';
@@ -23,12 +24,19 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
           username: event.username,
         );
         if (response == 'OK') {
-          yield RegistrationSuccess();
+          var auth = await _authRepository.authorization(
+              username: event.username,
+              password: event.password);
+          if (auth == 'OK') {
+            yield RegistrationSuccess();
+          } else {
+            yield RegistrationError();
+          }
         } else {
           yield RegistrationError();
         }
-      } catch (_) {
-        yield RegistrationError();
+      } on ServerNorResponding catch (error) {
+        yield RegistrationError(message: error.message);
       }
     }
   }

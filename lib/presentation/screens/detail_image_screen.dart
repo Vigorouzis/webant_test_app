@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:webant_test_app/data/datasources/date_helper.dart';
 import 'package:webant_test_app/data/models/image.dart';
 import 'package:webant_test_app/presentation/widgets/widgets.dart';
 import 'package:webant_test_app/utils/utils.dart';
@@ -11,16 +12,14 @@ class DetailImageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    image!.dateCreate =
-        "${image!.dateCreate!.substring(9, 11)}.${image!.dateCreate!.substring(6, 8)}.${image!.dateCreate!.substring(1, 5)}";
-
     return Scaffold(
+      appBar: CustomAppBar(
+        isMainScreen: false,
+        leading: AppIcons.backArrow(),
+      ),
       body: SafeArea(
         child: Column(
           children: [
-            CustomAppBar(
-              leading: AppIcons.backArrow(),
-            ),
             Container(
               width: 375.w,
               height: 251.h,
@@ -32,7 +31,10 @@ class DetailImageScreen extends StatelessWidget {
               children: [
                 Text(image!.name!.substring(0, image!.name!.indexOf('.'))),
                 Spacer(),
-                Text(image!.dateCreate!),
+                Text(DateHelper.getFormattedString(
+                    date: image!.dateCreate!,
+                    datePattern: DateHelper.digitMonth,
+                    countryCode: 'ru')),
               ],
             ),
             Padding(

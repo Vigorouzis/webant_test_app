@@ -34,9 +34,27 @@ class _SingInScreenState extends State<SingInScreen> {
     super.dispose();
   }
 
+  Size _textSize(String text, TextStyle style) {
+    final TextPainter textPainter = TextPainter(
+        text: TextSpan(text: text, style: style),
+        maxLines: 1,
+        textDirection: TextDirection.ltr)
+      ..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.size;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final Size txtSize = _textSize(context.localize!.signIn,
+        AppTypography.font30.copyWith(fontWeight: FontWeight.w700));
     return Scaffold(
+      appBar: CustomAppBar(
+        isMainScreen: false,
+        leading: Text(
+          context.localize!.cancel,
+          style: AppTypography.font15,
+        ),
+      ),
       body: SafeArea(
         child: BlocProvider(
           create: (_) => AuthBloc(),
@@ -49,124 +67,112 @@ class _SingInScreenState extends State<SingInScreen> {
                   );
                 }
               },
-              builder: (context, state) => Column(
-                children: [
-                  CustomAppBar(
-                    leading: Text(
-                      context.localize!.cancel,
-                      style: AppTypography.font15,
-                    ),
-                  ),
-                  SingleChildScrollView(
-                    child: Expanded(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(top: 100.h),
-                            child: SizedBox(
-                              child: Column(
-                                children: [
-                                  Text(
-                                    context.localize!.signIn,
-                                    style: AppTypography.font30
-                                        .copyWith(fontWeight: FontWeight.w700),
-                                  ),
-                                  Container(
-                                    width: 94.w,
-                                    height: 2.h,
-                                    color: AppColors.pinkCF497E,
-                                  )
-                                ],
+              builder: (context, state) => SingleChildScrollView(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: 100.h),
+                        child: SizedBox(
+                          child: Column(
+                            children: [
+                              Text(
+                                context.localize!.signIn,
+                                style: AppTypography.font30
+                                    .copyWith(fontWeight: FontWeight.w700),
                               ),
-                            ),
+                              Container(
+                                width: txtSize.width,
+                                height: 2.h,
+                                color: AppColors.pinkCF497E,
+                              )
+                            ],
                           ),
-                          CustomTextField(
-                            controller: _usernameController,
-                            hintText: context.localize!.username,
-                            padding: EdgeInsets.only(
-                                left: 16.w, right: 16.w, top: 50.h),
-                            trailing: AppIcons.email(),
+                        ),
+                      ),
+                      CustomTextField(
+                        controller: _usernameController,
+                        hintText: context.localize!.username,
+                        padding:
+                            EdgeInsets.only(left: 16.w, right: 16.w, top: 50.h),
+                        trailing: AppIcons.email(),
+                      ),
+                      CustomTextField(
+                        controller: _passwordController,
+                        hintText: context.localize!.password,
+                        padding:
+                            EdgeInsets.only(left: 16.w, right: 16.w, top: 29.h),
+                        trailing: AppIcons.eye(),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(right: 8.w, top: 10.h),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            context.localize!.forgotLoginOrPassword,
+                            style: AppTypography.font13
+                                .copyWith(color: AppColors.greyC4C4C4),
                           ),
-                          CustomTextField(
-                            controller: _passwordController,
-                            hintText: context.localize!.password,
-                            padding: EdgeInsets.only(
-                                left: 16.w, right: 16.w, top: 29.h),
-                            trailing: AppIcons.eye(),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(right: 8.w, top: 10.h),
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                context.localize!.forgotLoginOrPassword,
-                                style: AppTypography.font13
-                                    .copyWith(color: AppColors.greyC4C4C4),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 50.h),
-                            child: SizedBox(
-                              height: 36.h,
-                              width: 120.w,
-                              child: (() {
-                                if (state is AuthLoading) {
-                                  return CupertinoActivityIndicator();
-                                }
-                                return ElevatedButton(
-                                  onPressed: () {
-                                    if (_usernameController!.text.isNotEmpty &&
-                                        _passwordController!.text.isNotEmpty) {
-                                      context.read<AuthBloc>().add(
-                                            AuthorizationEvent(
-                                              email: _usernameController?.text,
-                                              password:
-                                                  _passwordController?.text,
-                                            ),
-                                          );
-                                    } else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(context
-                                              .localize!.notAllFieldsAreFilled),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 50.h),
+                        child: SizedBox(
+                          height: 36.h,
+                          width: 120.w,
+                          child: (() {
+                            if (state is AuthLoading) {
+                              return CupertinoActivityIndicator();
+                            }
+                            return ElevatedButton(
+                              onPressed: () {
+                                if (_usernameController!.text.isNotEmpty &&
+                                    _passwordController!.text.isNotEmpty) {
+                                  context.read<AuthBloc>().add(
+                                        AuthorizationEvent(
+                                          email: _usernameController?.text,
+                                          password: _passwordController?.text,
                                         ),
                                       );
-                                    }
-                                  },
-                                  child: Text(
-                                    context.localize!.signIn,
-                                    style: AppTypography.font17
-                                        .copyWith(fontWeight: FontWeight.w700),
-                                  ),
-                                  style: ElevatedButton.styleFrom(
-                                      primary: AppColors.black1D1D1D),
-                                );
-                              }()),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 19.h),
-                            child: TextButton(
-                              onPressed: () =>
-                                  Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (_) => SingUpScreen(),
-                                ),
-                              ),
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(context
+                                          .localize!.notAllFieldsAreFilled),
+                                    ),
+                                  );
+                                }
+                              },
                               child: Text(
-                                context.localize!.signUp,
+                                context.localize!.signIn,
                                 style: AppTypography.font17
-                                    .copyWith(color: Colors.black),
+                                    .copyWith(fontWeight: FontWeight.w700),
                               ),
+                              style: ElevatedButton.styleFrom(
+                                  primary: AppColors.black1D1D1D),
+                            );
+                          }()),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 19.h),
+                        child: TextButton(
+                          onPressed: () =>
+                              Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (_) => SingUpScreen(),
                             ),
                           ),
-                        ],
+                          child: Text(
+                            context.localize!.signUp,
+                            style: AppTypography.font17
+                                .copyWith(color: Colors.black),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),

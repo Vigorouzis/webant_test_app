@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:webant_test_app/utils/utils.dart';
 
 class CustomTextField extends StatefulWidget {
@@ -11,6 +12,9 @@ class CustomTextField extends StatefulWidget {
   final int? maxLines;
   final double? height;
 
+  final TextInputFormatter? formatter;
+  final String? Function(String?)? validator;
+
   CustomTextField({
     Key? key,
     required this.controller,
@@ -21,6 +25,8 @@ class CustomTextField extends StatefulWidget {
     this.obscureText = false,
     this.maxLines,
     this.height,
+    this.formatter,
+    this.validator,
   }) : super(key: key);
 
   @override
@@ -34,8 +40,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
       padding: widget.padding,
       child: Container(
         width: 343.w,
-        height: widget.height ?? 36.h,
-        child: TextField(
+        // height: widget.height ?? 36.h,
+        child: TextFormField(
+          validator: widget.validator,
+          inputFormatters:
+              widget.formatter != null ? [widget.formatter!] : null,
           maxLines: widget.maxLines ?? 1,
           obscureText: widget.obscureText,
           controller: widget.controller,
@@ -57,6 +66,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
               borderSide: BorderSide(color: AppColors.greyC4C4C4, width: 1),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide: BorderSide(color: AppColors.pinkCF497E, width: 1),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide: BorderSide(color: AppColors.pinkCF497E, width: 1),
             ),
           ),
         ),

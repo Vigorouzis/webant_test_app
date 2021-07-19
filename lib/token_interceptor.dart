@@ -16,9 +16,13 @@ class TokenInterceptor extends Interceptor {
   // Future onRequest(
   //     RequestOptions options, RequestInterceptorHandler handler) async {
   //   var tokensEntity = await preferences!.read('access_token');
+  //   print('REQUEST[${options.method}] => PATH: ${options.path}');
+  //
   //   if (tokensEntity.isNotEmpty) {
+  //     options.path =
+  //         '${ApiConstants.imageURL}?new=true&popular=false&&limit=10';
   //     options.headers = {
-  //       HttpHeaders.authorizationHeader: 'Bearer ${tokensEntity.accessToken}'
+  //       HttpHeaders.authorizationHeader: 'Bearer $tokensEntity'
   //     };
   //   }
   //
@@ -27,13 +31,10 @@ class TokenInterceptor extends Interceptor {
 
   @override
   Future onError(DioError err, ErrorInterceptorHandler handler) async {
-    if ((err.response!.data['error_description'] as String)
-            .contains('The access token provided is invalid') ||
-        (err.response!.data['error_description'] as String)
-            .contains('The access token provided has expired')) {
-      String? refreshToken = await preferences!.read('refresh_token');
-      refreshToken = refreshToken!.substring(1, refreshToken.length - 1);
-      print(refreshToken);
+    if (err.response!.statusCode == 401) {
+      String? refreshToken = await preferences?.read('refresh_token');
+      //refreshToken = refreshToken?.substring(1, refreshToken.length - 1);
+      // print(refreshToken);
       String? clientId = await preferences!.read('client_id');
       String? clientSecret;
       String? clientRandomId;
@@ -60,9 +61,14 @@ class TokenInterceptor extends Interceptor {
           }, method: 'GET'),
         );
 
-        await preferences!.save('access_token', response.data['access_token']);
+        var accessToken = response.data['access_token'] as String;
+        accessToken = accessToken.substring(1, accessToken.length - 1);
+        var refToken = response.data['refresh_token'] as String;
+        refToken = refToken.substring(1, refreshToken.length - 1);
+
+        await preferences!.save('access_token', accessToken);
         await preferences!
-            .save('refresh_token', response.data['refresh_token']);
+            .save('refresh_token', refToken);
       } else {
         return err;
       }
