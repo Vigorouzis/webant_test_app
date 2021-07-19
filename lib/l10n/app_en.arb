@@ -35,5 +35,7 @@
   "description": "Description",
   "dataChanged": "Data changed",
   "oldPassword": "Old password",
-  "newPassword": "New password"
+  "newPassword": "New password",
+  "youCan": "You can ",
+  "deleteYourAccount": "delete your account"
 }

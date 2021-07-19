@@ -35,5 +35,7 @@
   "description": "Описание",
   "dataChanged": "Данные изменены",
   "oldPassword": "Старый пароль",
-  "newPassword": "Новый пароль"
+  "newPassword": "Новый пароль",
+  "youCan": "Вы можете ",
+  "deleteYourAccount": "удалить свой аккаунт"
 }
