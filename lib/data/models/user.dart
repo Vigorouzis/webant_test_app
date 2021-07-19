@@ -23,7 +23,6 @@ class User extends UserEntity {
   final String? username;
   @HiveField(6)
   List<String?>? uploadImages;
-  File? avatar;
 
   User({
     this.name,
@@ -33,7 +32,7 @@ class User extends UserEntity {
     this.phone,
     this.password,
     this.username,
-    this.avatar,
+
   }) : super(
             birthday: birthday,
             username: username,
@@ -42,7 +41,7 @@ class User extends UserEntity {
             email: email,
             phone: phone,
             password: password,
-            avatar: avatar);
+            );
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 }

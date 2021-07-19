@@ -23,14 +23,13 @@ class ProfileSettingsBloc
       yield ProfileSettingsLoadingState();
       try {
         var response = await _userRepository!.sendDataToApi(
-          fullName: event.fullName,
-          birthday: event.birthday,
-          email: event.email,
-          phone: event.phone,
-          username: event.username,
-          oldPassword: event.oldPassword,
-          newPassword: event.newPassword
-        );
+            fullName: event.fullName,
+            birthday: event.birthday,
+            email: event.email,
+            phone: event.phone,
+            username: event.username,
+            oldPassword: event.oldPassword,
+            newPassword: event.newPassword);
         if (response != null) {
           yield ProfileSettingsLoaded(user: response);
         } else {
@@ -39,25 +38,6 @@ class ProfileSettingsBloc
       } catch (_) {
         yield ProfileSettingsFailed();
       }
-    }
-
-    if (event is SetProfileAvatar) {
-
-     await _getFromGallery(event.user);
-      if (event.user!.avatar != null) {
-        yield InitProfileSettingsState(user: event.user);
-      }
-    }
-  }
-
-  Future<void> _getFromGallery(User? user)  async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-      maxWidth: 1800,
-      maxHeight: 1800,
-    );
-    if (pickedFile != null) {
-      user!.avatar = File(pickedFile.path);
     }
   }
 }

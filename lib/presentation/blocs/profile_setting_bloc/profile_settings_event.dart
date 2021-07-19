@@ -25,9 +25,3 @@ class SendDataToApi extends ProfileSettingsEvent {
     this.confirmPassword,
   });
 }
-
-class SetProfileAvatar extends ProfileSettingsEvent {
-  final User? user;
-
-  SetProfileAvatar({this.user});
-}
