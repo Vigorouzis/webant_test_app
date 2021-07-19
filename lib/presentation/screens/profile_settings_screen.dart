@@ -203,7 +203,27 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                   trailing: AppIcons.email(),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 71.h, left: 16.w),
+                  padding: EdgeInsets.only(top: 39.h, left: 16.w),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: GestureDetector(
+                        onTap: () => print('hello'),
+                        child: RichText(
+                          text: TextSpan(children: [
+                            TextSpan(
+                                text: context.localize!.youCan,
+                                style: AppTypography.font14
+                                    .copyWith(color: Colors.black)),
+                            TextSpan(
+                                text: context.localize!.deleteYourAccount,
+                                style: AppTypography.font14
+                                    .copyWith(color: AppColors.pinkCF497E)),
+                          ]),
+                        ),
+                      )),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 20.h, left: 16.w, bottom: 86.h),
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: TextButton(

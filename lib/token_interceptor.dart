@@ -67,8 +67,7 @@ class TokenInterceptor extends Interceptor {
         refToken = refToken.substring(1, refreshToken.length - 1);
 
         await preferences!.save('access_token', accessToken);
-        await preferences!
-            .save('refresh_token', refToken);
+        await preferences!.save('refresh_token', refToken);
       } else {
         return err;
       }
