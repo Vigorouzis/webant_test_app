@@ -121,19 +121,10 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 10.h),
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        context.read<ProfileSettingsBloc>().add(
-                              SetProfileAvatar(user: widget._user),
-                            );
-                      });
-                    },
-                    child: Text(
-                      context.localize!.uploadPhoto,
-                      style: AppTypography.font12
-                          .copyWith(color: AppColors.greyC4C4C4),
-                    ),
+                  child: Text(
+                    context.localize!.uploadPhoto,
+                    style: AppTypography.font12
+                        .copyWith(color: AppColors.greyC4C4C4),
                   ),
                 ),
                 Padding(
