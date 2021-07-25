@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:webant_test_app/data/datasources/gateway.dart';
 import 'package:webant_test_app/data/datasources/shared_prefs.dart';
 import 'package:webant_test_app/data/models/user.dart';
 import 'package:webant_test_app/data/repositories/auth_repository_impl.dart';
@@ -18,6 +19,9 @@ Future<void> setDI() async {
       SharedPrefs(preferences: injection.get<SharedPreferences>());
   injection.registerLazySingleton(() => sharedPreferences);
 
+  injection.registerLazySingleton<Gateway>(
+      () => Gateway(prefs: injection.get<SharedPrefs>()));
+
   final Dio dio = Dio(BaseOptions(
     contentType: 'application/json',
     sendTimeout: 10000,
@@ -30,8 +34,7 @@ Future<void> setDI() async {
 
   injection
       .registerLazySingleton<AuthRepositoryImpl>(() => AuthRepositoryImpl());
-  injection
-      .registerLazySingleton<User>(() => User());
+  injection.registerLazySingleton<User>(() => User());
   injection
       .registerLazySingleton<ImageRepositoryImpl>(() => ImageRepositoryImpl());
   injection
